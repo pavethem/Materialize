@@ -8,6 +8,15 @@ I decided to port materialize to linux, since the original is for windows only. 
 For sugestions, doubts or anything related to this port.
 - Email : mk2play.materialize@gmail.com
 
+## Better Suportted On
+
+- Ubuntu 16.04, 18.04
+- CentOS 7
+- x86-64 architecture
+- Gnome desktop environment running on top of X11 windowing system
+- Nvidia official proprietary graphics driver, AMD Mesa graphics driver
+- Desktop form factors, running on device/hardware without emulation or compatibility layer
+
 ## Using
 To use, unity is not necessary, you can use like a normal linux application.
 
