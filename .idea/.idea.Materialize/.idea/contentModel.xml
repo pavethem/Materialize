@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="$USER_HOME$/.Rider2018.3/system/extResources" t="IncludeRecursive" />
-    <e p="$USER_HOME$/.Rider2018.3/system/resharper-host/local/Transient/ReSharperHost/v183/SolutionCaches/_Materialize.-44301162.00" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/.Rider2019.2/system/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/.Rider2019.2/system/resharper-host/local/Transient/ReSharperHost/v192/SolutionCaches/_Materialize.-44301162.00" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/Android/Sdk/platforms/android-28/data/res" t="IncludeRecursive" />
+    <e p="$USER_HOME$/Android/Sdk/sources/android-28" t="IncludeRecursive" />
     <e p="$PROJECT_DIR$" t="IncludeRecursive">
       <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
@@ -161,11 +163,8 @@
         <e p="favorites.txt" t="Include" />
         <e p="packages" t="ExcludeRecursive" />
       </e>
-      <e p="Library" t="ExcludeRecursive" />
       <e p="Materialize.sln" t="IncludeFlat" />
-      <e p="Temp" t="ExcludeRecursive">
-        <e p="bin" t="ExcludeRecursive" />
-      </e>
+      <e p="Temp/bin" t="ExcludeRecursive" />
       <e p="obj" t="ExcludeRecursive" />
     </e>
   </component>

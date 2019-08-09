@@ -252,7 +252,7 @@ public class EdgeFromNormalGui : MonoBehaviour
         var offsetY = 30;
 
         _doStuff = GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Pre Contrast", _settings.Blur0Contrast,
-            _settings.Blur0ContrastText, out _settings.Blur0Contrast, out _settings.Blur0ContrastText, 0.0f, 5.0f);
+            out _settings.Blur0Contrast, 0.0f, 5.0f);
         offsetY += 50;
 
         GUI.Label(new Rect(offsetX, offsetY, 250, 30), "Frequency Equalizer");
@@ -281,33 +281,27 @@ public class EdgeFromNormalGui : MonoBehaviour
         offsetY += 120;
 
         GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Edge Amount", _settings.EdgeAmount,
-            _settings.EdgeAmountText,
-            out _settings.EdgeAmount, out _settings.EdgeAmountText, 0.0f, 1.0f);
+            out _settings.EdgeAmount, 0.0f, 1.0f);
         offsetY += 40;
 
         GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Crevice Amount", _settings.CreviceAmount,
-            _settings.CreviceAmountText,
-            out _settings.CreviceAmount, out _settings.CreviceAmountText, 0.0f, 1.0f);
+            out _settings.CreviceAmount, 0.0f, 1.0f);
         offsetY += 40;
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Pinch", _settings.Pinch, _settings.PinchText,
-            out _settings.Pinch,
-            out _settings.PinchText, 0.1f, 10.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Pinch", _settings.Pinch, out _settings.Pinch,
+            0.1f, 10.0f);
         offsetY += 40;
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Pillow", _settings.Pillow, _settings.PillowText,
-            out _settings.Pillow,
-            out _settings.PillowText, 0.1f, 5.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Pillow", _settings.Pillow, out _settings.Pillow,
+            0.1f, 5.0f);
         offsetY += 40;
 
         GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Final Contrast", _settings.FinalContrast,
-            _settings.FinalContrastText,
-            out _settings.FinalContrast, out _settings.FinalContrastText, 0.1f, 30.0f);
+            out _settings.FinalContrast, 0.1f, 30.0f);
         offsetY += 40;
 
         GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Final Bias", _settings.FinalBias,
-            _settings.FinalBiasText,
-            out _settings.FinalBias, out _settings.FinalBiasText, -1.0f, 1.0f);
+            out _settings.FinalBias, -1.0f, 1.0f);
         offsetY += 50;
 
         if (GUI.Button(new Rect(offsetX + 10, offsetY, 130, 30), "Reset to Defaults"))

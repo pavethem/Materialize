@@ -262,18 +262,15 @@ public class MetallicGui : MonoBehaviour
         offsetY += 40;
 
         GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "High Pass Overlay", _metallicSettings.BlurOverlay,
-            _metallicSettings.BlurOverlayText,
-            out _metallicSettings.BlurOverlay, out _metallicSettings.BlurOverlayText, -10.0f, 10.0f);
+            out _metallicSettings.BlurOverlay, -10.0f, 10.0f);
         offsetY += 40;
 
         GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Final Contrast", _metallicSettings.FinalContrast,
-            _metallicSettings.FinalContrastText,
-            out _metallicSettings.FinalContrast, out _metallicSettings.FinalContrastText, -2.0f, 2.0f);
+            out _metallicSettings.FinalContrast, -2.0f, 2.0f);
         offsetY += 40;
 
         GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Final Bias", _metallicSettings.FinalBias,
-            _metallicSettings.FinalBiasText,
-            out _metallicSettings.FinalBias, out _metallicSettings.FinalBiasText, -0.5f, 0.5f);
+            out _metallicSettings.FinalBias, -0.5f, 0.5f);
         offsetY += 50;
         if (GUI.Button(new Rect(offsetX + 10, offsetY, 130, 30), "Reset to Defaults"))
         {
@@ -281,6 +278,7 @@ public class MetallicGui : MonoBehaviour
             SetValues(new ProjectObject());
             //StartCoroutine(ProcessDiffuse());
         }
+
         if (GUI.Button(new Rect(offsetX + 150, offsetY, 130, 30), "Set as Metallic")) StartCoroutine(ProcessMetallic());
 
 

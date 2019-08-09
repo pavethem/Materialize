@@ -201,7 +201,7 @@ public class NormalFromHeightGui : MonoBehaviour
         offsetY += 40;
 
         if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Pre Contrast", _settings.Blur0Contrast,
-            _settings.Blur0ContrastText, out _settings.Blur0Contrast, out _settings.Blur0ContrastText, 0.0f, 50.0f))
+            out _settings.Blur0Contrast, 0.0f, 50.0f))
             _doStuff = true;
         offsetY += 50;
 
@@ -233,15 +233,13 @@ public class NormalFromHeightGui : MonoBehaviour
         GUI.Label(new Rect(offsetX, offsetY, 250, 30), "Angular Intensity");
         offsetY += 25;
         GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), _settings.AngularIntensity,
-            _settings.AngularIntensityText,
-            out _settings.AngularIntensity, out _settings.AngularIntensityText, 0.0f, 1.0f);
+            out _settings.AngularIntensity, 0.0f, 1.0f);
         offsetY += 25;
 
         GUI.Label(new Rect(offsetX, offsetY, 250, 30), "Angularity Amount");
         offsetY += 25;
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), _settings.Angularity, _settings.AngularityText,
-            out _settings.Angularity,
-            out _settings.AngularityText, 0.0f, 1.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), _settings.Angularity, out _settings.Angularity, 0.0f,
+            1.0f);
 
         offsetY += 30;
 
@@ -266,21 +264,20 @@ public class NormalFromHeightGui : MonoBehaviour
         GUI.Label(new Rect(offsetX, offsetY, 280, 30), " Shape Recognition, Rotation, Spread, Bias");
         offsetY += 30;
         if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), _settings.ShapeRecognition,
-            _settings.ShapeRecognitionText,
-            out _settings.ShapeRecognition, out _settings.ShapeRecognitionText, 0.0f, 1.0f)) _doStuff = true;
+            out _settings.ShapeRecognition, 0.0f, 1.0f)) _doStuff = true;
         offsetY += 25;
-        if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), _settings.LightRotation, _settings.LightRotationText,
-            out _settings.LightRotation, out _settings.LightRotationText, -3.14f, 3.14f)) _doStuff = true;
+        if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), _settings.LightRotation,
+            out _settings.LightRotation, -3.14f, 3.14f)) _doStuff = true;
         offsetY += 25;
-        if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), _settings.SlopeBlur, _settings.SlopeBlurText,
-            out _settings.SlopeBlur, out _settings.SlopeBlurText, 5, 100)) _doStuff = true;
+        if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), _settings.SlopeBlur,
+            out _settings.SlopeBlur, 5, 100)) _doStuff = true;
         offsetY += 25;
-        if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), _settings.ShapeBias, _settings.ShapeBiasText,
-            out _settings.ShapeBias, out _settings.ShapeBiasText, 0.0f, 1.0f)) _doStuff = true;
+        if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), _settings.ShapeBias,
+            out _settings.ShapeBias, 0.0f, 1.0f)) _doStuff = true;
         offsetY += 30;
 
         GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Final Contrast", _settings.FinalContrast,
-            _settings.FinalContrastText, out _settings.FinalContrast, out _settings.FinalContrastText, 0.0f, 10.0f);
+            out _settings.FinalContrast, 0.0f, 10.0f);
         offsetY += 50;
 
         if (GUI.Button(new Rect(offsetX + 10, offsetY, 130, 30), "Reset to Defaults"))

@@ -137,25 +137,24 @@ public class AoFromNormalGui : MonoBehaviour
         const int offsetX = 10;
         var offsetY = 30;
 
-        if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "AO pixel Spread", _aos.Spread, _aos.SpreadText,
-            out _aos.Spread, out _aos.SpreadText, 10.0f, 100.0f)) _doStuff = true;
+        if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "AO pixel Spread", _aos.Spread,
+            out _aos.Spread, 10.0f, 100.0f)) _doStuff = true;
         offsetY += 40;
 
-        if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Pixel Depth", _aos.Depth, _aos.DepthText,
-            out _aos.Depth, out _aos.DepthText, 0.0f, 256.0f)) _doStuff = true;
+        if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Pixel Depth", _aos.Depth,
+            out _aos.Depth, 0.0f, 256.0f)) _doStuff = true;
         offsetY += 40;
 
         GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Blend Normal AO and Depth AO", _aos.Blend,
-            _aos.BlendText,
-            out _aos.Blend, out _aos.BlendText, 0.0f, 1.0f);
+            out _aos.Blend, 0.0f, 1.0f);
         offsetY += 40;
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "AO Power", _aos.FinalContrast, _aos.FinalContrastText,
-            out _aos.FinalContrast, out _aos.FinalContrastText, 0.1f, 10.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "AO Power", _aos.FinalContrast,
+            out _aos.FinalContrast, 0.1f, 10.0f);
         offsetY += 40;
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "AO Bias", _aos.FinalBias, _aos.FinalBiasText,
-            out _aos.FinalBias, out _aos.FinalBiasText, -1.0f, 1.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "AO Bias", _aos.FinalBias,
+            out _aos.FinalBias, -1.0f, 1.0f);
         offsetY += 50;
 
         GUI.enabled = !Busy;

@@ -9,11 +9,7 @@ public class MaterialSettings
 {
     [DefaultValue(1.0f)] public float AoPower;
 
-    [DefaultValue("1")] public string AoPowerText;
-
     [DefaultValue(1.0f)] public float EdgePower;
-
-    [DefaultValue("1")] public string EdgePowerText;
 
     [DefaultValue(1.0f)] public float LightB;
 
@@ -25,31 +21,16 @@ public class MaterialSettings
 
     [DefaultValue(1.0f)] public float Metallic;
 
-    [DefaultValue("1")] public string MetallicText;
-
     [DefaultValue(0.5f)] public float Parallax;
-
-    [DefaultValue("0.5")] public string ParallaxText;
 
     [DefaultValue(1.0f)] public float Smoothness;
 
-    [DefaultValue("1")] public string SmoothnessText;
-
     [DefaultValue(0.0f)] public float TexOffsetX;
-
-    [DefaultValue("0")] public string TexOffsetXText;
-
     [DefaultValue(0.0f)] public float TexOffsetY;
-
-    [DefaultValue("0")] public string TexOffsetYText;
 
     [DefaultValue(1.0f)] public float TexTilingX;
 
-    [DefaultValue("1")] public string TexTilingXText;
-
     [DefaultValue(1.0f)] public float TexTilingY;
-
-    [DefaultValue("1")] public string TexTilingYText;
 
     public MaterialSettings()
     {
@@ -58,22 +39,11 @@ public class MaterialSettings
         TexOffsetX = 0.0f;
         TexOffsetY = 0.0f;
 
-        TexTilingXText = "1";
-        TexTilingYText = "1";
-        TexOffsetXText = "0";
-        TexOffsetYText = "0";
-
         Metallic = 1.0f;
         Smoothness = 1.0f;
         Parallax = 0.5f;
         EdgePower = 1.0f;
         AoPower = 1.0f;
-
-        MetallicText = "1";
-        SmoothnessText = "1";
-        ParallaxText = "0.5";
-        EdgePowerText = "1";
-        AoPowerText = "1";
 
         LightR = 1.0f;
         LightG = 1.0f;
@@ -242,28 +212,24 @@ public class MaterialGui : MonoBehaviour
 
 
         GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Metallic Multiplier", _materialSettings.Metallic,
-            _materialSettings.MetallicText,
-            out _materialSettings.Metallic, out _materialSettings.MetallicText, 0.0f, 2.0f);
+            out _materialSettings.Metallic, 0.0f, 2.0f);
         offsetY += 40;
 
         GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Smoothness Multiplier", _materialSettings.Smoothness,
-            _materialSettings.SmoothnessText, out _materialSettings.Smoothness, out _materialSettings.SmoothnessText,
+            out _materialSettings.Smoothness,
             0.0f, 2.0f);
         offsetY += 40;
 
         GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Paralax Displacement", _materialSettings.Parallax,
-            _materialSettings.ParallaxText,
-            out _materialSettings.Parallax, out _materialSettings.ParallaxText, 0.0f, 2.0f);
+            out _materialSettings.Parallax, 0.0f, 2.0f);
         offsetY += 40;
 
         GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Edge Amount", _materialSettings.EdgePower,
-            _materialSettings.EdgePowerText,
-            out _materialSettings.EdgePower, out _materialSettings.EdgePowerText, 0.0f, 2.0f);
+            out _materialSettings.EdgePower, 0.0f, 2.0f);
         offsetY += 40;
 
         GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Ambient Occlusion Power", _materialSettings.AoPower,
-            _materialSettings.AoPowerText,
-            out _materialSettings.AoPower, out _materialSettings.AoPowerText, 0.0f, 2.0f);
+            out _materialSettings.AoPower, 0.0f, 2.0f);
         offsetY += 40;
 
         GUI.Label(new Rect(offsetX, offsetY, 250, 30), "Light Color");
@@ -271,23 +237,19 @@ public class MaterialGui : MonoBehaviour
         offsetY += 160;
 
         GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Texture Tiling X", _materialSettings.TexTilingX,
-            _materialSettings.TexTilingXText,
-            out _materialSettings.TexTilingX, out _materialSettings.TexTilingXText, 0.1f, 5.0f);
+            out _materialSettings.TexTilingX, 0.1f, 5.0f);
         offsetY += 30;
 
         GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Texture Tiling Y", _materialSettings.TexTilingY,
-            _materialSettings.TexTilingYText,
-            out _materialSettings.TexTilingY, out _materialSettings.TexTilingYText, 0.1f, 5.0f);
+            out _materialSettings.TexTilingY, 0.1f, 5.0f);
         offsetY += 50;
 
         GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Texture Offset X", _materialSettings.TexOffsetX,
-            _materialSettings.TexOffsetXText,
-            out _materialSettings.TexOffsetX, out _materialSettings.TexOffsetXText, -1.0f, 1.0f);
+            out _materialSettings.TexOffsetX, -1.0f, 1.0f);
         offsetY += 30;
 
         GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Texture Offset Y", _materialSettings.TexOffsetY,
-            _materialSettings.TexOffsetYText,
-            out _materialSettings.TexOffsetY, out _materialSettings.TexOffsetYText, -1.0f, 1.0f);
+            out _materialSettings.TexOffsetY, -1.0f, 1.0f);
         offsetY += 50;
 
         if (GUI.Button(new Rect(offsetX, offsetY, 60, 30), "Plane"))

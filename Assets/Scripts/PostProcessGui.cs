@@ -9,35 +9,26 @@ public class PostProcessGui : MonoBehaviour
     private bool _autoFocus = true;
 
     private float _bloomAmount = 1.0f;
-    private string _bloomAmountText = "1.0";
 
     private float _bloomThreshold = 0.8f;
-    private string _bloomThresholdText = "0.8";
 
     private float _dofFocalDepth = 10.0f;
-    private string _dofFocalDepthText = "10.0";
 
     private float _dofMaxBlur;
-    private string _dofMaxBlurText = "0.0";
 
     private float _dofMaxDistance = 50.0f;
-    private string _dofMaxDistanceText = "50.0";
-
     private bool _enablePostProcess = true;
 
     private bool _initialized;
 
     private float _lensDirtAmount = 1.0f;
-    private string _lensDirtAmountText = "1.0";
 
     private float _lensFlareAmount = 0.5f;
-    private string _lensFlareAmountText = "0.5";
 
     private OpaquePostProcess _oppScript;
     private PostProcess _ppScript;
 
     private float _vignetteAmount = 0.2f;
-    private string _vignetteAmountText = "0.2";
 
     private Rect _windowRect = new Rect(360, 330, 300, 530);
     public GameObject MainCamera;
@@ -118,39 +109,38 @@ public class PostProcessGui : MonoBehaviour
         offsetY += 40;
 
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Bloom Threshold", _bloomThreshold, _bloomThresholdText,
-            out _bloomThreshold, out _bloomThresholdText, 0.0f, 2.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Bloom Threshold", _bloomThreshold,
+            out _bloomThreshold, 0.0f, 2.0f);
         offsetY += 40;
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Bloom Amount", _bloomAmount, _bloomAmountText,
-            out _bloomAmount, out _bloomAmountText, 0.0f, 8.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Bloom Amount", _bloomAmount,
+            out _bloomAmount, 0.0f, 8.0f);
         offsetY += 60;
 
 
         GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Lens Flare Amount", _lensFlareAmount,
-            _lensFlareAmountText,
-            out _lensFlareAmount, out _lensFlareAmountText, 0.0f, 4.0f);
+            out _lensFlareAmount, 0.0f, 4.0f);
         offsetY += 40;
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Lens Dirt Amount", _lensDirtAmount, _lensDirtAmountText,
-            out _lensDirtAmount, out _lensDirtAmountText, 0.0f, 2.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Lens Dirt Amount", _lensDirtAmount,
+            out _lensDirtAmount, 0.0f, 2.0f);
         offsetY += 40;
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Vignette Amount", _vignetteAmount, _vignetteAmountText,
-            out _vignetteAmount, out _vignetteAmountText, 0.0f, 1.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Vignette Amount", _vignetteAmount,
+            out _vignetteAmount, 0.0f, 1.0f);
         offsetY += 60;
 
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "DOF Max Blur", _dofMaxBlur, _dofMaxBlurText,
-            out _dofMaxBlur, out _dofMaxBlurText, 0.0f, 16.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "DOF Max Blur", _dofMaxBlur,
+            out _dofMaxBlur, 0.0f, 16.0f);
         offsetY += 40;
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "DOF Focal Depth", _dofFocalDepth, _dofFocalDepthText,
-            out _dofFocalDepth, out _dofFocalDepthText, 1.0f, 50.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "DOF Focal Depth", _dofFocalDepth,
+            out _dofFocalDepth, 1.0f, 50.0f);
         offsetY += 40;
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "DOF Max Distance", _dofMaxDistance, _dofMaxDistanceText,
-            out _dofMaxDistance, out _dofMaxDistanceText, 5.0f, 200.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "DOF Max Distance", _dofMaxDistance,
+            out _dofMaxDistance, 5.0f, 200.0f);
         offsetY += 50;
 
         _autoFocus = GUI.Toggle(new Rect(offsetX, offsetY, 150, 20), _autoFocus, "Use Auto Focus");
