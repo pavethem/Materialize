@@ -62,14 +62,18 @@ public class SaveLoadProject : MonoBehaviour
 {
     private char _pathChar;
     private ProjectObject _thisProject;
-    private MainGui MainGUI;
+    [SerializeField] private MainGui MainGUI;
 
     [HideInInspector] public bool Busy;
 
     // Use this for initialization
     private void Start()
     {
-        MainGUI = FindObjectOfType<MainGui>();
+        if (MainGUI == null)
+        {
+            MainGUI = FindObjectOfType<MainGui>();
+        }
+
         if (Application.platform == RuntimePlatform.WindowsEditor ||
             Application.platform == RuntimePlatform.WindowsPlayer)
             _pathChar = '\\';
