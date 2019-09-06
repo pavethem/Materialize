@@ -1,173 +1,161 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿#region
 
-public class PostProcessGui : MonoBehaviour {
+using UnityEngine;
 
-	public GameObject MainGuiObject;
-	public GameObject MainCamera;
+#endregion
 
-	OpaquePostProcess oppScript;
-	PostProcess ppScript;
+public class PostProcessGui : MonoBehaviour
+{
+    private bool _autoFocus = true;
 
-	bool EnablePostProcess = true;
+    private float _bloomAmount = 1.0f;
 
-	bool UseTAA = true;
+    private float _bloomThreshold = 0.8f;
 
-	float BloomThreshold = 0.8f;
-	string BloomThresholdText = "0.8";
+    private float _dofFocalDepth = 10.0f;
 
-	float BloomAmount = 1.0f;
-	string BloomAmountText = "1.0";
-	
-	float LensFlareAmount = 0.5f;
-	string LensFlareAmountText = "0.5";
+    private float _dofMaxBlur;
 
-	float LensDirtAmount = 1.0f;
-	string LensDirtAmountText = "1.0";
+    private float _dofMaxDistance = 50.0f;
+    private bool _enablePostProcess = true;
 
-	float VignetteAmount = 0.2f;
-	string VignetteAmountText = "0.2";
+    private bool _initialized;
 
-	float DOFMaxBlur = 0.0f;
-	string DOFMaxBlurText = "0.0";
+    private float _lensDirtAmount = 1.0f;
 
-	float DOFFocalDepth = 10.0f;
-	string DOFFocalDepthText = "10.0";
+    private float _lensFlareAmount = 0.5f;
 
-	float DOFMaxDistance = 50.0f;
-	string DOFMaxDistanceText = "50.0";
+    private OpaquePostProcess _oppScript;
+    private PostProcess _ppScript;
 
-	bool AutoFocus = true;
+    private float _vignetteAmount = 0.2f;
 
-	Rect windowRect = new Rect (360, 330, 300, 530);
+    private Rect _windowRect = new Rect(360, 330, 300, 530);
+    public GameObject MainCamera;
 
-	bool initialized = false;
-	
-	// Use this for initialization
-	void Start () {
-		Initialize ();
-	}
+    // Use this for initialization
+    private void Start()
+    {
+        Initialize();
+    }
 
-	void Initialize(){
-		if (!initialized) {
-			oppScript = MainCamera.GetComponent<OpaquePostProcess> ();
-			ppScript = MainCamera.GetComponent<PostProcess> ();
-			initialized = true;
-		}
-	}
+    private void Initialize()
+    {
+        if (_initialized) return;
+        _oppScript = MainCamera.GetComponent<OpaquePostProcess>();
+        _ppScript = MainCamera.GetComponent<PostProcess>();
+        _initialized = true;
+    }
 
-	public void PostProcessOn(){
-		Initialize ();
+    public void PostProcessOn()
+    {
+        Initialize();
 
-		EnablePostProcess = true;
+        _enablePostProcess = true;
 
-		oppScript.enabled = true;
-		
-		ppScript.enabled = true;
-		ppScript.bloomThreshold = BloomThreshold;
-		ppScript.bloomAmount = BloomAmount;
-		
-		ppScript.lensFlareAmount = LensFlareAmount;
-		ppScript.lensDirtAmount = LensDirtAmount;
-		ppScript.vignetteAmount = VignetteAmount;
+        _oppScript.enabled = true;
+
+        _ppScript.enabled = true;
+        _ppScript.bloomThreshold = _bloomThreshold;
+        _ppScript.bloomAmount = _bloomAmount;
+
+        _ppScript.lensFlareAmount = _lensFlareAmount;
+        _ppScript.lensDirtAmount = _lensDirtAmount;
+        _ppScript.vignetteAmount = _vignetteAmount;
 
 
-		if (DOFMaxBlur > 12) {
-			ppScript.DOFMaxBlur = 16;
-		} else if (DOFMaxBlur > 6) {
-			ppScript.DOFMaxBlur = 8;
-		} else if (DOFMaxBlur > 3) {
-			ppScript.DOFMaxBlur = 4;
-		} else if (DOFMaxBlur > 1.5) {
-			ppScript.DOFMaxBlur = 2;
-		} else if (DOFMaxBlur > 0.5) {
-			ppScript.DOFMaxBlur = 1;
-		} else {
-			ppScript.DOFMaxBlur = 0;
-		}
-		ppScript.focalDepth = DOFFocalDepth;
-		ppScript.DOFMaxDistance = DOFMaxDistance;
+        if (_dofMaxBlur > 12)
+            _ppScript.DOFMaxBlur = 16;
+        else if (_dofMaxBlur > 6)
+            _ppScript.DOFMaxBlur = 8;
+        else if (_dofMaxBlur > 3)
+            _ppScript.DOFMaxBlur = 4;
+        else if (_dofMaxBlur > 1.5)
+            _ppScript.DOFMaxBlur = 2;
+        else if (_dofMaxBlur > 0.5)
+            _ppScript.DOFMaxBlur = 1;
+        else
+            _ppScript.DOFMaxBlur = 0;
+        _ppScript.focalDepth = _dofFocalDepth;
+        _ppScript.DOFMaxDistance = _dofMaxDistance;
 
-		ppScript.AutoFocus = AutoFocus;
-	}
+        _ppScript.AutoFocus = _autoFocus;
+    }
 
-	public void PostProcessOff(){
-		Initialize ();
+    public void PostProcessOff()
+    {
+        Initialize();
 
-		EnablePostProcess = false;
+        _enablePostProcess = false;
 
-		oppScript.enabled = false;			
-		ppScript.enabled = false;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        _oppScript.enabled = false;
+        _ppScript.enabled = false;
+    }
 
-		if (EnablePostProcess) {
-			PostProcessOn();
-		} else {
-			PostProcessOff();
-		}
-	
-	}
+    private void Update()
+    {
+        if (_enablePostProcess)
+            PostProcessOn();
+        else
+            PostProcessOff();
+    }
 
-	void DoMyWindow ( int windowID ) {
-		
-		int spacingX = 0;
-		int spacingY = 50;
-		int spacing2Y = 70;
-		
-		int offsetX = 10;
-		int offsetY = 30;
-		
-		EnablePostProcess = GUI.Toggle (new Rect (offsetX, offsetY, 280, 30), EnablePostProcess, "Enable Post Process");
-		offsetY += 40;
+    private void DoMyWindow(int windowId)
+    {
+        const int offsetX = 10;
+        var offsetY = 30;
+
+        _enablePostProcess = GUI.Toggle(new Rect(offsetX, offsetY, 280, 30), _enablePostProcess, "Enable Post Process");
+        offsetY += 40;
 
 
-		GuiHelper.Slider (new Rect (offsetX, offsetY, 280, 50), "Bloom Threshold", BloomThreshold, BloomThresholdText, out BloomThreshold, out BloomThresholdText, 0.0f, 2.0f );
-		offsetY += 40;
-		
-		GuiHelper.Slider (new Rect (offsetX, offsetY, 280, 50), "Bloom Amount", BloomAmount, BloomAmountText, out BloomAmount, out BloomAmountText, 0.0f, 8.0f );
-		offsetY += 60;
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Bloom Threshold", _bloomThreshold,
+            out _bloomThreshold, 0.0f, 2.0f);
+        offsetY += 40;
+
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Bloom Amount", _bloomAmount,
+            out _bloomAmount, 0.0f, 8.0f);
+        offsetY += 60;
 
 
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Lens Flare Amount", _lensFlareAmount,
+            out _lensFlareAmount, 0.0f, 4.0f);
+        offsetY += 40;
 
-		GuiHelper.Slider (new Rect (offsetX, offsetY, 280, 50), "Lens Flare Amount", LensFlareAmount, LensFlareAmountText, out LensFlareAmount, out LensFlareAmountText, 0.0f, 4.0f );
-		offsetY += 40;
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Lens Dirt Amount", _lensDirtAmount,
+            out _lensDirtAmount, 0.0f, 2.0f);
+        offsetY += 40;
 
-		GuiHelper.Slider (new Rect (offsetX, offsetY, 280, 50), "Lens Dirt Amount", LensDirtAmount, LensDirtAmountText, out LensDirtAmount, out LensDirtAmountText, 0.0f, 2.0f );
-		offsetY += 40;
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Vignette Amount", _vignetteAmount,
+            out _vignetteAmount, 0.0f, 1.0f);
+        offsetY += 60;
 
-		GuiHelper.Slider (new Rect (offsetX, offsetY, 280, 50), "Vignette Amount", VignetteAmount, VignetteAmountText, out VignetteAmount, out VignetteAmountText, 0.0f, 1.0f );
-		offsetY += 60;
 
-		
-		GuiHelper.Slider (new Rect (offsetX, offsetY, 280, 50), "DOF Max Blur", DOFMaxBlur, DOFMaxBlurText, out DOFMaxBlur, out DOFMaxBlurText, 0.0f, 16.0f );
-		offsetY += 40;
-		
-		GuiHelper.Slider (new Rect (offsetX, offsetY, 280, 50), "DOF Focal Depth", DOFFocalDepth, DOFFocalDepthText, out DOFFocalDepth, out DOFFocalDepthText, 1.0f, 50.0f );
-		offsetY += 40;
-		
-		GuiHelper.Slider (new Rect (offsetX, offsetY, 280, 50), "DOF Max Distance", DOFMaxDistance, DOFMaxDistanceText, out DOFMaxDistance, out DOFMaxDistanceText, 5.0f, 200.0f );
-		offsetY += 50;
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "DOF Max Blur", _dofMaxBlur,
+            out _dofMaxBlur, 0.0f, 16.0f);
+        offsetY += 40;
 
-		AutoFocus = GUI.Toggle (new Rect (offsetX, offsetY, 150, 20), AutoFocus, "Use Auto Focus");
-		offsetY += 30;
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "DOF Focal Depth", _dofFocalDepth,
+            out _dofFocalDepth, 1.0f, 50.0f);
+        offsetY += 40;
 
-		if (GUI.Button (new Rect (offsetX + 150, offsetY, 130, 30), "Close")) {
-			this.gameObject.SetActive(false);
-		}
-		
-		GUI.DragWindow();
-		
-	}
-	
-	void OnGUI () {
-		
-		windowRect.width = 300;
-		windowRect.height = 510;
-		
-		windowRect = GUI.Window(19, windowRect, DoMyWindow, "Post Process");
-		
-	}
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "DOF Max Distance", _dofMaxDistance,
+            out _dofMaxDistance, 5.0f, 200.0f);
+        offsetY += 50;
+
+        _autoFocus = GUI.Toggle(new Rect(offsetX, offsetY, 150, 20), _autoFocus, "Use Auto Focus");
+        offsetY += 30;
+
+        if (GUI.Button(new Rect(offsetX + 150, offsetY, 130, 30), "Close")) gameObject.SetActive(false);
+
+        GUI.DragWindow();
+    }
+
+    private void OnGUI()
+    {
+        _windowRect.width = 300;
+        _windowRect.height = 510;
+
+        _windowRect = GUI.Window(19, _windowRect, DoMyWindow, "Post Process");
+    }
 }
