@@ -1,3 +1,5 @@
+# Sponsor
+I spent dozens of hours improving this, feel free to sponsor, but no problem if you dont.
 # Materialize
 Materialize is a program for converting images to materials for use mainly but not restrict to video games.
 
