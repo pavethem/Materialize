@@ -14,7 +14,7 @@ public class SuggestionGui : MonoBehaviour
 
     private string _suggestionText = "";
 
-    private Rect _windowRect = new Rect(30, 300, 300, 450);
+    private Rect _windowRect = new(30, 300, 300, 450);
 
     private void Start()
     {

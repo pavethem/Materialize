@@ -56,7 +56,7 @@ public class EdgeFromNormalGui : MonoBehaviour
     private RenderTexture _tempBlurMap;
     private RenderTexture _tempEdgeMap;
 
-    private Rect _windowRect = new Rect(30, 300, 300, 600);
+    private Rect _windowRect = new(30, 300, 300, 600);
 
     [HideInInspector] public bool Busy;
 

@@ -1,29 +1,33 @@
 ﻿// Only works on ARGB32, RGB24 and Alpha8 textures that are marked readable
 
 using System.Threading;
+using JetBrains.Annotations;
 using UnityEngine;
+using Object = System.Object;
+// ReSharper disable MemberCanBePrivate.Global
 
+[UsedImplicitly]
 public class TextureScale
 {
     public class ThreadData
     {
-        public int start;
-        public int end;
+        public readonly int Start;
+        public readonly int End;
         public ThreadData(int s, int e)
         {
-            start = s;
-            end = e;
+            Start = s;
+            End = e;
         }
     }
 
-    private static Color[] texColors;
-    private static Color[] newColors;
-    private static int w;
-    private static float ratioX;
-    private static float ratioY;
-    private static int w2;
-    private static int finishCount;
-    private static Mutex mutex;
+    private static Color[] _texColors;
+    private static Color[] _newColors;
+    private static int _w;
+    private static float _ratioX;
+    private static float _ratioY;
+    private static int _w2;
+    private static int _finishCount;
+    private static Mutex _mutex;
 
     public static void Point(Texture2D tex, int newWidth, int newHeight)
     {
@@ -38,37 +42,34 @@ public class TextureScale
 
     private static Texture2D ThreadedScale(Texture2D tex, int newWidth, int newHeight, bool useBilinear)
     {
-        texColors = tex.GetPixels();
-        newColors = new Color[newWidth * newHeight];
+        _texColors = tex.GetPixels();
+        _newColors = new Color[newWidth * newHeight];
         if (useBilinear)
         {
-            ratioX = 1.0f / ((float)newWidth / (tex.width - 1));
-            ratioY = 1.0f / ((float)newHeight / (tex.height - 1));
+            _ratioX = 1.0f / ((float)newWidth / (tex.width - 1));
+            _ratioY = 1.0f / ((float)newHeight / (tex.height - 1));
         }
         else
         {
-            ratioX = ((float)tex.width) / newWidth;
-            ratioY = ((float)tex.height) / newHeight;
+            _ratioX = ((float)tex.width) / newWidth;
+            _ratioY = ((float)tex.height) / newHeight;
         }
-        w = tex.width;
-        w2 = newWidth;
+        _w = tex.width;
+        _w2 = newWidth;
         var cores = Mathf.Min(SystemInfo.processorCount, newHeight);
         var slice = newHeight / cores;
 
-        finishCount = 0;
-        if (mutex == null)
-        {
-            mutex = new Mutex(false);
-        }
+        _finishCount = 0;
+        _mutex ??= new Mutex(false);
         if (cores > 1)
         {
-            int i = 0;
+            int i;
             ThreadData threadData;
             for (i = 0; i < cores - 1; i++)
             {
                 threadData = new ThreadData(slice * i, slice * (i + 1));
-                ParameterizedThreadStart ts = useBilinear ? new ParameterizedThreadStart(BilinearScale) : new ParameterizedThreadStart(PointScale);
-                Thread thread = new Thread(ts);
+                var ts = useBilinear ? BilinearScale : new ParameterizedThreadStart(PointScale);
+                var thread = new Thread(ts);
                 thread.Start(threadData);
             }
             threadData = new ThreadData(slice * i, newHeight);
@@ -80,14 +81,14 @@ public class TextureScale
             {
                 PointScale(threadData);
             }
-            while (finishCount < cores)
+            while (_finishCount < cores)
             {
                 Thread.Sleep(1);
             }
         }
         else
         {
-            ThreadData threadData = new ThreadData(0, newHeight);
+            var threadData = new ThreadData(0, newHeight);
             if (useBilinear)
             {
                 BilinearScale(threadData);
@@ -98,57 +99,57 @@ public class TextureScale
             }
         }
 
-        tex.Resize(newWidth, newHeight);
-        tex.SetPixels(newColors);
+        tex.Reinitialize(newWidth, newHeight);
+        tex.SetPixels(_newColors);
         Debug.Log(tex);
         tex.Apply();
 
-        texColors = null;
-        newColors = null;
+        _texColors = null;
+        _newColors = null;
         return tex;
     }
 
-    public static void BilinearScale(System.Object obj)
+    public static void BilinearScale(Object obj)
     {
-        ThreadData threadData = (ThreadData)obj;
-        for (var y = threadData.start; y < threadData.end; y++)
+        var threadData = (ThreadData)obj;
+        for (var y = threadData.Start; y < threadData.End; y++)
         {
-            int yFloor = (int)Mathf.Floor(y * ratioY);
-            var y1 = yFloor * w;
-            var y2 = (yFloor + 1) * w;
-            var yw = y * w2;
+            var yFloor = (int)Mathf.Floor(y * _ratioY);
+            var y1 = yFloor * _w;
+            var y2 = (yFloor + 1) * _w;
+            var yw = y * _w2;
 
-            for (var x = 0; x < w2; x++)
+            for (var x = 0; x < _w2; x++)
             {
-                int xFloor = (int)Mathf.Floor(x * ratioX);
-                var xLerp = x * ratioX - xFloor;
-                newColors[yw + x] = ColorLerpUnclamped(ColorLerpUnclamped(texColors[y1 + xFloor], texColors[y1 + xFloor + 1], xLerp),
-                                                       ColorLerpUnclamped(texColors[y2 + xFloor], texColors[y2 + xFloor + 1], xLerp),
-                                                       y * ratioY - yFloor);
+                var xFloor = (int)Mathf.Floor(x * _ratioX);
+                var xLerp = x * _ratioX - xFloor;
+                _newColors[yw + x] = ColorLerpUnclamped(ColorLerpUnclamped(_texColors[y1 + xFloor], _texColors[y1 + xFloor + 1], xLerp),
+                                                       ColorLerpUnclamped(_texColors[y2 + xFloor], _texColors[y2 + xFloor + 1], xLerp),
+                                                       y * _ratioY - yFloor);
             }
         }
 
-        mutex.WaitOne();
-        finishCount++;
-        mutex.ReleaseMutex();
+        _mutex.WaitOne();
+        _finishCount++;
+        _mutex.ReleaseMutex();
     }
 
-    public static void PointScale(System.Object obj)
+    public static void PointScale(Object obj)
     {
-        ThreadData threadData = (ThreadData)obj;
-        for (var y = threadData.start; y < threadData.end; y++)
+        var threadData = (ThreadData)obj;
+        for (var y = threadData.Start; y < threadData.End; y++)
         {
-            var thisY = (int)(ratioY * y) * w;
-            var yw = y * w2;
-            for (var x = 0; x < w2; x++)
+            var thisY = (int)(_ratioY * y) * _w;
+            var yw = y * _w2;
+            for (var x = 0; x < _w2; x++)
             {
-                newColors[yw + x] = texColors[(int)(thisY + ratioX * x)];
+                _newColors[yw + x] = _texColors[(int)(thisY + _ratioX * x)];
             }
         }
 
-        mutex.WaitOne();
-        finishCount++;
-        mutex.ReleaseMutex();
+        _mutex.WaitOne();
+        _finishCount++;
+        _mutex.ReleaseMutex();
     }
 
     private static Color ColorLerpUnclamped(Color c1, Color c2, float value)

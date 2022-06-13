@@ -114,7 +114,7 @@ public class HeightFromDiffuseGui : MonoBehaviour
     private RenderTexture _tempBlurMap;
     private RenderTexture _tempHeightMap;
 
-    private Rect _windowRect = new Rect(30, 300, 300, 480);
+    private Rect _windowRect = new(30, 300, 300, 480);
 
     [HideInInspector] public bool Busy;
 

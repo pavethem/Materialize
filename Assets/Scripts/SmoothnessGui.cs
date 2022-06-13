@@ -82,7 +82,7 @@ public class SmoothnessGui : MonoBehaviour
 
     private RenderTexture _tempMap;
 
-    private Rect _windowRect = new Rect(30, 300, 300, 530);
+    private Rect _windowRect = new(30, 300, 300, 530);
 
     [HideInInspector] public bool Busy;
 

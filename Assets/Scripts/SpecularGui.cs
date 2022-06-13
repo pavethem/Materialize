@@ -1,6 +1,7 @@
 ﻿#region
 
 using System.Collections;
+using System.Globalization;
 using UnityEngine;
 
 #endregion
@@ -128,11 +129,11 @@ public class SpecularGui : MonoBehaviour
 
     private static string FloatToString(float num, int length)
     {
-        var numString = num.ToString();
+        var numString = num.ToString(CultureInfo.CurrentCulture);
         var numStringLength = numString.Length;
         var lastIndex = Mathf.FloorToInt(Mathf.Min(numStringLength, (float) length));
 
-        return numString.Substring(0, lastIndex);
+        return numString[..lastIndex];
     }
 
     private void OnGUI()

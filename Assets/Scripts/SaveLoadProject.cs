@@ -6,7 +6,10 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
+using Materialize.General;
 using UnityEngine;
+using Utility;
+using Logger = Utility.Logger;
 
 #endregion
 
@@ -108,7 +111,8 @@ public class SaveLoadProject : MonoBehaviour
     public void SaveProject(string pathToFile)
     {
         if (pathToFile.Contains("."))
-            pathToFile = pathToFile.Substring(0, pathToFile.LastIndexOf(".", StringComparison.Ordinal));
+            pathToFile =
+                pathToFile.Substring(0, pathToFile.LastIndexOf(".", StringComparison.Ordinal));
 
         Debug.Log("Saving Project: " + pathToFile);
 
@@ -173,10 +177,7 @@ public class SaveLoadProject : MonoBehaviour
         SaveAllFiles(pathToFile);
     }
 
-    public void SaveAllFiles(string pathToFile)
-    {
-        StartCoroutine(SaveAllTextures(pathToFile));
-    }
+    public void SaveAllFiles(string pathToFile) { StartCoroutine(SaveAllTextures(pathToFile)); }
 
     public void SaveFile(string pathToFile, Texture2D textureToSave)
     {
@@ -200,8 +201,7 @@ public class SaveLoadProject : MonoBehaviour
         {
             pathToFile = Path.GetTempFileName() + ".png";
             BashRunner.Run($"xclip -selection clipboard -t image/png -o > {pathToFile}");
-        }
-        else
+        } else
         {
             BashRunner.Run($"xclip -selection clipboard -o > {pathToTextFile}");
             bashOut = File.ReadAllText(pathToTextFile);
@@ -224,9 +224,7 @@ public class SaveLoadProject : MonoBehaviour
         StartCoroutine(LoadTexture(mapTypeToLoad, pathToFile));
     }
 
-    public void CopyFile(Texture2D textureToSave)
-    {
-    }
+    public void CopyFile(Texture2D textureToSave) { }
 
     //==============================================//
     //			Texture Saving Coroutines			//
@@ -236,22 +234,29 @@ public class SaveLoadProject : MonoBehaviour
     private IEnumerator SaveAllTextures(string pathToFile)
     {
         var path = pathToFile.Substring(0, pathToFile.LastIndexOf(_pathChar) + 1);
-        yield return StartCoroutine(SaveTexture(MainGui.Instance.HeightMap, path + _thisProject.HeightMapPath));
+        yield return StartCoroutine(SaveTexture(MainGui.Instance.HeightMap,
+            path + _thisProject.HeightMapPath));
 
-        yield return StartCoroutine(SaveTexture(MainGui.Instance.DiffuseMap, path + _thisProject.DiffuseMapPath));
+        yield return StartCoroutine(SaveTexture(MainGui.Instance.DiffuseMap,
+            path + _thisProject.DiffuseMapPath));
 
         yield return StartCoroutine(SaveTexture(MainGui.Instance.DiffuseMapOriginal,
             path + _thisProject.DiffuseMapOriginalPath));
 
-        yield return StartCoroutine(SaveTexture(MainGui.Instance.NormalMap, path + _thisProject.NormalMapPath));
+        yield return StartCoroutine(SaveTexture(MainGui.Instance.NormalMap,
+            path + _thisProject.NormalMapPath));
 
-        yield return StartCoroutine(SaveTexture(MainGui.Instance.MetallicMap, path + _thisProject.MetallicMapPath));
+        yield return StartCoroutine(SaveTexture(MainGui.Instance.MetallicMap,
+            path + _thisProject.MetallicMapPath));
 
-        yield return StartCoroutine(SaveTexture(MainGui.Instance.SmoothnessMap, path + _thisProject.SmoothnessMapPath));
+        yield return StartCoroutine(SaveTexture(MainGui.Instance.SmoothnessMap,
+            path + _thisProject.SmoothnessMapPath));
 
-        yield return StartCoroutine(SaveTexture(MainGui.Instance.EdgeMap, path + _thisProject.EdgeMapPath));
+        yield return StartCoroutine(SaveTexture(MainGui.Instance.EdgeMap,
+            path + _thisProject.EdgeMapPath));
 
-        yield return StartCoroutine(SaveTexture(MainGui.Instance.AoMap, path + _thisProject.AoMapPath));
+        yield return StartCoroutine(SaveTexture(MainGui.Instance.AoMap,
+            path + _thisProject.AoMapPath));
     }
 
     public IEnumerator SaveTexture(string extension, Texture2D textureToSave, string pathToFile)
@@ -261,15 +266,17 @@ public class SaveLoadProject : MonoBehaviour
 
     private IEnumerator SaveTexture(Texture2D textureToSave, string pathToFile)
     {
-        if (!textureToSave || pathToFile.IsNullOrEmpty()) yield break;
+        if (!textureToSave || string.IsNullOrEmpty(pathToFile)) yield break;
         if (MainGui.Instance.ScaleTexture)
         {
             //TextureScale.BilinearScale(_textureToSave);
-            textureToSave = TextureScale.Bilinear(textureToSave, int.Parse(MainGui.Instance.XSize), int.Parse(MainGui.Instance.YSize));
+            textureToSave = TextureScale.Bilinear(textureToSave, int.Parse(MainGui.Instance.XSize),
+                int.Parse(MainGui.Instance.YSize));
         }
 
         Debug.Log($"Salvando {textureToSave} como {pathToFile}");
-        if (!pathToFile.Contains(".")) pathToFile = $"{pathToFile}.{MainGui.Instance.SelectedFormat}";
+        if (!pathToFile.Contains("."))
+            pathToFile = $"{pathToFile}.{MainGui.Instance.SelectedFormat}";
 
         var fileIndex = pathToFile.LastIndexOf('.');
         var extension = pathToFile.Substring(fileIndex + 1, pathToFile.Length - fileIndex - 1);
@@ -324,7 +331,8 @@ public class SaveLoadProject : MonoBehaviour
         while (Busy) yield return new WaitForSeconds(0.01f);
 
         if (_thisProject.DiffuseMapOriginalPath != "null")
-            StartCoroutine(LoadTexture(MapType.DiffuseOriginal, pathToFile + _thisProject.DiffuseMapOriginalPath));
+            StartCoroutine(LoadTexture(MapType.DiffuseOriginal,
+                pathToFile + _thisProject.DiffuseMapOriginalPath));
 
         while (Busy) yield return new WaitForSeconds(0.01f);
 
@@ -339,12 +347,14 @@ public class SaveLoadProject : MonoBehaviour
         while (Busy) yield return new WaitForSeconds(0.01f);
 
         if (_thisProject.MetallicMapPath != "null")
-            StartCoroutine(LoadTexture(MapType.Metallic, pathToFile + _thisProject.MetallicMapPath));
+            StartCoroutine(LoadTexture(MapType.Metallic,
+                pathToFile + _thisProject.MetallicMapPath));
 
         while (Busy) yield return new WaitForSeconds(0.01f);
 
         if (_thisProject.SmoothnessMapPath != "null")
-            StartCoroutine(LoadTexture(MapType.Smoothness, pathToFile + _thisProject.SmoothnessMapPath));
+            StartCoroutine(LoadTexture(MapType.Smoothness,
+                pathToFile + _thisProject.SmoothnessMapPath));
 
         while (Busy) yield return new WaitForSeconds(0.01f);
 
@@ -368,11 +378,10 @@ public class SaveLoadProject : MonoBehaviour
         Texture2D newTexture = null;
         pathToFile = Uri.UnescapeDataString(pathToFile);
 
+
         if (File.Exists(pathToFile))
         {
-            var fileData = File.ReadAllBytes(pathToFile);
-            newTexture = new Texture2D(2, 2);
-            newTexture.LoadImage(fileData); //..this will auto-resize the texture dimensions.
+            newTexture = GetTextureFromFile(pathToFile);
         }
 
         if (!newTexture) yield break;
@@ -419,5 +428,57 @@ public class SaveLoadProject : MonoBehaviour
         yield return new WaitForSeconds(0.01f);
 
         Busy = false;
+    }
+
+    private static ProgramEnums.FileFormat GetFormat(string path)
+    {
+        var format = path.Substring(path.LastIndexOf(".", StringComparison.Ordinal) + 1, 3);
+        Logger.Log($"Carregando {format}");
+
+        if (!Enum.TryParse(format, true, out ProgramEnums.FileFormat fileFormat))
+            return ProgramEnums.FileFormat.Invalid;
+
+        Logger.Log("Tipo encontrado : " + fileFormat);
+        return fileFormat;
+    }
+
+    private static Texture2D LoadPngBmpJpg(string path)
+    {
+        var newTexture = new Texture2D(2, 2);
+        if (!File.Exists(path)) return null;
+
+        var fileData = File.ReadAllBytes(path);
+
+        newTexture.LoadImage(fileData);
+
+        return newTexture;
+    }
+
+
+    public static Texture2D GetTextureFromFile(string pathToFile)
+    {
+        pathToFile = Uri.UnescapeDataString(pathToFile);
+
+        var fileFormat = GetFormat(pathToFile);
+
+        Texture2D newTexture = null;
+        switch (fileFormat)
+        {
+            case ProgramEnums.FileFormat.Png:
+            case ProgramEnums.FileFormat.Jpg:
+            case ProgramEnums.FileFormat.Bmp:
+                newTexture = LoadPngBmpJpg(pathToFile);
+                break;
+            case ProgramEnums.FileFormat.Tga:
+                newTexture = TGALoader.LoadTGA(pathToFile);
+                break;
+            case ProgramEnums.FileFormat.Invalid:
+                Logger.Log("Tipo de arquivo invalido " + fileFormat);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        return newTexture;
     }
 }

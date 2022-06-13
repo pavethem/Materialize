@@ -1,50 +1,45 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System;
+using System.Collections;
 using System.IO;
-using SFB;
 using System.Linq;
-using System;
+using UnityEngine;
 
 public class BatchUI : MonoBehaviour
 {
     public MainGui MainGui;
    // public HeightFromDiffuseGui HeightmapCreator;
-    public bool UseInitalLocation;
-    bool PathIsSet;
-    string path = null;
+    public bool UseInitializeLocation;
+    private bool _pathIsSet;
+    private string _path;
     public bool ProcessPropertyMap;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         MainGui = FindObjectOfType<MainGui>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    public void UseInitalLocationToggle(bool value) { UseInitalLocation = value; }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     public void BatchLoadTextures()
     {
         StartCoroutine(BatchProcessTextures());
     }
-    public IEnumerator BatchProcessTextures()
+
+    // ReSharper disable Unity.PerformanceAnalysis
+    private IEnumerator BatchProcessTextures()
     {
-        var path = StandaloneFileBrowser.OpenFolderPanel("Texture Files Location", "", false);
+        var path = StandaloneFileBrowser.Runtime.StandaloneFileBrowser.OpenFolderPanel("Texture Files Location", "", false);
         //var path = StandaloneFileBrowser.SaveFilePanel("Texture Directory", "", "","");
         var s = Directory.GetFiles(path[0], "*.*").Where(g => g.EndsWith(".jpg") || g.EndsWith(".png"));
-        foreach (string f in s)
+        foreach (var f in s)
         {
             //BatchProcessTextures(f);
 
-            byte[] Data = System.IO.File.ReadAllBytes(f);
-            Texture2D Tex = new Texture2D(2, 2);
-            if (Tex.LoadImage(Data))
+            var data = File.ReadAllBytes(f);
+            var tex = new Texture2D(2, 2);
+            if (tex.LoadImage(data))
             {
-                yield return StartCoroutine(BatchTextures(Tex, f));
+                yield return StartCoroutine(BatchTextures(tex, f));
 
                 //MainGui.HeightFromDiffuseGuiScript.StartCoroutine(ProcessHeight());
                 //return null;
@@ -52,7 +47,9 @@ public class BatchUI : MonoBehaviour
         }
         //return null;
     }
-    IEnumerator BatchTextures(Texture2D T, string name)
+
+    // ReSharper disable Unity.PerformanceAnalysis
+    private IEnumerator BatchTextures(Texture2D T, string texName)
     {
         MainGui.DiffuseMapOriginal = T;
         MainGui.HeightFromDiffuseGuiObject.SetActive(true);
@@ -73,10 +70,10 @@ public class BatchUI : MonoBehaviour
         MainGui.CloseWindows();
         MainGui.FixSize();
         MainGui.MetallicMap = new Texture2D(MainGui.HeightMap.width, MainGui.HeightMap.height);
-        Color theColor = new Color();
-        for (int x = 0; x < MainGui.MetallicMap.width; x++)
+        var theColor = new Color();
+        for (var x = 0; x < MainGui.MetallicMap.width; x++)
         {
-            for (int y = 0; y < MainGui.MetallicMap.height; y++)
+            for (var y = 0; y < MainGui.MetallicMap.height; y++)
             {
                 theColor.r = 0;
                 theColor.g = 0;
@@ -115,38 +112,38 @@ public class BatchUI : MonoBehaviour
 
         yield return new WaitForSeconds(.3f);
         
-        List<string> names = name.Split( new string[] { "/", "\\" }, StringSplitOptions.None).ToList<string>();
+        var names = texName.Split( new[] { "/", "\\" }, StringSplitOptions.None).ToList();
         //Debug.Log(names);
         foreach(var s in names)
         {
             Debug.Log(s);
         }
-        string defaultName = names[names.Count - 1];
+        var defaultName = names[^1];
         Debug.Log(defaultName);
-        names = defaultName.Split('.').ToList<string>();
+        names = defaultName.Split('.').ToList();
         defaultName = names[0];
-        string NameWithOutExtension = defaultName;
+        var nameWithOutExtension = defaultName;
         defaultName = defaultName + ".mtz";
         
-        if (UseInitalLocation)
+        if (UseInitializeLocation)
         {
-            if (!PathIsSet)
+            if (!_pathIsSet)
             {
-                path = StandaloneFileBrowser.SaveFilePanel("Save Project", MainGui._lastDirectory, defaultName, "mtz");
+                _path = StandaloneFileBrowser.Runtime.StandaloneFileBrowser.SaveFilePanel("Save Project", MainGui.LastDirectory, defaultName, "mtz");
                 //if (path.IsNullOrEmpty()) return;
-                PathIsSet = true;
-                var lastBar = path.LastIndexOf(MainGui._pathChar);
-                MainGui._lastDirectory = path.Substring(0, lastBar + 1);
+                _pathIsSet = true;
+                var lastBar = _path.LastIndexOf(MainGui.PathChar);
+                MainGui.LastDirectory = _path.Substring(0, lastBar + 1);
 
             }
             else
             {
-                List<string> PathSplit = path.Split(new string[] { "/", "\\" }, StringSplitOptions.None).ToList<string>();
+                var pathSplit = _path.Split(new[] { "/", "\\" }, StringSplitOptions.None).ToList();
                 //PathSplit[PathSplit.Length - 1]
-                PathSplit.RemoveAt(PathSplit.Count - 1);
+                pathSplit.RemoveAt(pathSplit.Count - 1);
                 //Debug.Log(PathSplit);
-                path = string.Join("/" , PathSplit.ToArray());
-                path = path+ "/" + defaultName;
+                _path = string.Join("/" , pathSplit.ToArray());
+                _path = _path+ "/" + defaultName;
                 Debug.Log(defaultName);
                 //var lastBar = path.LastIndexOf(MainGui._pathChar);
                 //MainGui._lastDirectory = path.Substring(0, lastBar + 1);
@@ -154,17 +151,17 @@ public class BatchUI : MonoBehaviour
         }
         else
         {
-            path = StandaloneFileBrowser.SaveFilePanel("Save Project", MainGui._lastDirectory, defaultName, "mtz");
-            var lastBar = path.LastIndexOf(MainGui._pathChar);
-            MainGui._lastDirectory = path.Substring(0, lastBar + 1);
+            _path = StandaloneFileBrowser.Runtime.StandaloneFileBrowser.SaveFilePanel("Save Project", MainGui.LastDirectory, defaultName, "mtz");
+            var lastBar = _path.LastIndexOf(MainGui.PathChar);
+            MainGui.LastDirectory = _path[..(lastBar + 1)];
         }
-        Debug.Log(path);
-        MainGui._saveLoadProjectScript.SaveProject(path);
+        Debug.Log(_path);
+        MainGui.SaveLoadProjectScript.SaveProject(_path);
         yield return new WaitForSeconds(1f);
         if (ProcessPropertyMap)
         {
             MainGui.ProcessPropertyMap();
-            MainGui.SaveTextureFile(MapType.Property, path, NameWithOutExtension);
+            MainGui.SaveTextureFile(MapType.Property, _path, nameWithOutExtension);
         }
         //return null;
     }

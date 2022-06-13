@@ -42,18 +42,18 @@ public class AlignmentGui : MonoBehaviour
     private float _perspectiveX;
 
     private float _perspectiveY;
-    private Vector2 _pointBl = new Vector2(0.0f, 0.0f);
-    private Vector2 _pointBr = new Vector2(1.0f, 0.0f);
+    private Vector2 _pointBl = new(0.0f, 0.0f);
+    private Vector2 _pointBr = new(1.0f, 0.0f);
 
-    private Vector2 _pointTl = new Vector2(0.0f, 1.0f);
-    private Vector2 _pointTr = new Vector2(1.0f, 1.0f);
+    private Vector2 _pointTl = new(0.0f, 1.0f);
+    private Vector2 _pointTr = new(1.0f, 1.0f);
 
     private float _slider = 0.5f;
     private Vector2 _startOffset = Vector2.zero;
 
     private Texture2D _textureToAlign;
 
-    private Rect _windowRect = new Rect(30, 300, 300, 530);
+    private Rect _windowRect = new(30, 300, 300, 530);
     [UsedImplicitly] public bool NewTexture;
     public GameObject TestObject;
 

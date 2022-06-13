@@ -52,8 +52,8 @@ public class WelcomeGui : MonoBehaviour
         TestObject.SetActive(true);
         MainGuiObject.SetActive(true);
         SettingsGuiObject.SetActive(true);
-        ControlsGuiObject.SetActive(true);
-        CommandListExecutorObject.SetActive(true);
+        // ControlsGuiObject.SetActive(true);
+        // CommandListExecutorObject.SetActive(true);
     }
 
     private void OnGUI()

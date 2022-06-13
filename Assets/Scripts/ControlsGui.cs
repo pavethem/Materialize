@@ -8,7 +8,7 @@ public class ControlsGui : MonoBehaviour
 {
     private bool _windowOpen;
 
-    private Rect _windowRect = new Rect(Screen.width - 520, Screen.height - 320, 300, 600);
+    private Rect _windowRect = new(Screen.width - 520, Screen.height - 320, 300, 600);
 
     private void DoMyWindow(int windowId)
     {

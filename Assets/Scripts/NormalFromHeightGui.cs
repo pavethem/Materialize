@@ -37,7 +37,7 @@ public class NormalFromHeightGui : MonoBehaviour
     private MainGui _mgs;
     private bool _newTexture;
 
-    private NormalFromHeightSettings _settings;
+    private NormalFromHeightSettings _settings = new();
     private bool _settingsInitialized;
 
     private float _slider = 0.5f;
@@ -45,7 +45,7 @@ public class NormalFromHeightGui : MonoBehaviour
     private RenderTexture _tempBlurMap;
     private RenderTexture _tempNormalMap;
 
-    private Rect _windowRect = new Rect(30, 300, 300, 450);
+    private Rect _windowRect = new(30, 350, 300, 450);
 
     [HideInInspector] public bool Busy;
 
@@ -69,8 +69,7 @@ public class NormalFromHeightGui : MonoBehaviour
         if (projectObject.NormalFromHeightSettings != null)
         {
             _settings = projectObject.NormalFromHeightSettings;
-        }
-        else
+        } else
         {
             _settingsInitialized = false;
             InitializeSettings();
@@ -99,15 +98,9 @@ public class NormalFromHeightGui : MonoBehaviour
         InitializeSettings();
     }
 
-    public void DoStuff()
-    {
-        _doStuff = true;
-    }
+    public void DoStuff() { _doStuff = true; }
 
-    public void NewTexture()
-    {
-        _newTexture = true;
-    }
+    public void NewTexture() { _newTexture = true; }
 
     private void SetWeightEqDefault()
     {
@@ -196,88 +189,89 @@ public class NormalFromHeightGui : MonoBehaviour
         var offsetY = 30;
 
         GUI.Label(new Rect(offsetX, offsetY, 250, 30), "Normal Reveal Slider");
-        _slider = GUI.HorizontalSlider(new Rect(offsetX, offsetY + 20, 280, 10), _slider, 0.0f, 1.0f);
+        _slider = GUI.HorizontalSlider(new Rect(offsetX, offsetY + 20, 280, 10), _slider, 0.0f,
+            1.0f);
 
         offsetY += 40;
 
-        if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Pre Contrast", _settings.Blur0Contrast,
-            out _settings.Blur0Contrast, 0.0f, 50.0f))
+        if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Pre Contrast",
+                _settings.Blur0Contrast, out _settings.Blur0Contrast, 0.0f, 50.0f))
             _doStuff = true;
         offsetY += 50;
 
         GUI.Label(new Rect(offsetX, offsetY, 250, 30), "Frequency Equalizer");
-        GUI.Label(new Rect(offsetX + 225, offsetY, 100, 30), "Presets");
-        if (GUI.Button(new Rect(offsetX + 215, offsetY + 30, 60, 20), "Default")) SetWeightEqDefault();
-        if (GUI.Button(new Rect(offsetX + 215, offsetY + 60, 60, 20), "Smooth")) SetWeightEqSmooth();
-        if (GUI.Button(new Rect(offsetX + 215, offsetY + 90, 60, 20), "Crisp")) SetWeightEqCrisp();
-        if (GUI.Button(new Rect(offsetX + 215, offsetY + 120, 60, 20), "Mids")) SetWeightEqMids();
+        GUI.Label(new Rect(offsetX + 230, offsetY, 100, 30), "Presets");
+        if (GUI.Button(new Rect(offsetX + 220, offsetY + 30, 60, 20), "Default"))
+            SetWeightEqDefault();
+        if (GUI.Button(new Rect(offsetX + 220, offsetY + 60, 60, 20), "Smooth"))
+            SetWeightEqSmooth();
+        if (GUI.Button(new Rect(offsetX + 220, offsetY + 90, 60, 20), "Crisp")) SetWeightEqCrisp();
+        if (GUI.Button(new Rect(offsetX + 220, offsetY + 120, 60, 20), "Mids")) SetWeightEqMids();
         offsetY += 30;
         offsetX += 10;
-        _settings.Blur0Weight =
-            GUI.VerticalSlider(new Rect(offsetX + 180, offsetY, 10, 100), _settings.Blur0Weight, 1.0f, 0.0f);
-        _settings.Blur1Weight =
-            GUI.VerticalSlider(new Rect(offsetX + 150, offsetY, 10, 100), _settings.Blur1Weight, 1.0f, 0.0f);
-        _settings.Blur2Weight =
-            GUI.VerticalSlider(new Rect(offsetX + 120, offsetY, 10, 100), _settings.Blur2Weight, 1.0f, 0.0f);
-        _settings.Blur3Weight =
-            GUI.VerticalSlider(new Rect(offsetX + 90, offsetY, 10, 100), _settings.Blur3Weight, 1.0f, 0.0f);
-        _settings.Blur4Weight =
-            GUI.VerticalSlider(new Rect(offsetX + 60, offsetY, 10, 100), _settings.Blur4Weight, 1.0f, 0.0f);
-        _settings.Blur5Weight =
-            GUI.VerticalSlider(new Rect(offsetX + 30, offsetY, 10, 100), _settings.Blur5Weight, 1.0f, 0.0f);
-        _settings.Blur6Weight =
-            GUI.VerticalSlider(new Rect(offsetX + 0, offsetY, 10, 100), _settings.Blur6Weight, 1.0f, 0.0f);
+        _settings.Blur0Weight = GUI.VerticalSlider(new Rect(offsetX + 180, offsetY, 10, 100),
+            _settings.Blur0Weight, 1.0f, 0.0f);
+        _settings.Blur1Weight = GUI.VerticalSlider(new Rect(offsetX + 150, offsetY, 10, 100),
+            _settings.Blur1Weight, 1.0f, 0.0f);
+        _settings.Blur2Weight = GUI.VerticalSlider(new Rect(offsetX + 120, offsetY, 10, 100),
+            _settings.Blur2Weight, 1.0f, 0.0f);
+        _settings.Blur3Weight = GUI.VerticalSlider(new Rect(offsetX + 90, offsetY, 10, 100),
+            _settings.Blur3Weight, 1.0f, 0.0f);
+        _settings.Blur4Weight = GUI.VerticalSlider(new Rect(offsetX + 60, offsetY, 10, 100),
+            _settings.Blur4Weight, 1.0f, 0.0f);
+        _settings.Blur5Weight = GUI.VerticalSlider(new Rect(offsetX + 30, offsetY, 10, 100),
+            _settings.Blur5Weight, 1.0f, 0.0f);
+        _settings.Blur6Weight = GUI.VerticalSlider(new Rect(offsetX + 0, offsetY, 10, 100),
+            _settings.Blur6Weight, 1.0f, 0.0f);
         offsetX -= 10;
         offsetY += 120;
 
-        GUI.Label(new Rect(offsetX, offsetY, 250, 30), "Angular Intensity");
-        offsetY += 25;
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), _settings.AngularIntensity,
-            out _settings.AngularIntensity, 0.0f, 1.0f);
-        offsetY += 25;
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Angular Intensity",
+            _settings.AngularIntensity, out _settings.AngularIntensity, 0.0f, 1.0f);
+        offsetY += 40;
 
-        GUI.Label(new Rect(offsetX, offsetY, 250, 30), "Angularity Amount");
-        offsetY += 25;
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), _settings.Angularity, out _settings.Angularity, 0.0f,
-            1.0f);
-
-        offsetY += 30;
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Angularity", _settings.Angularity,
+            out _settings.Angularity, 0.0f, 1.0f);
 
         if (_mgs.DiffuseMapOriginal)
         {
             GUI.enabled = true;
-        }
-        else
+        } else
         {
             GUI.enabled = false;
             _settings.UseDiffuse = false;
         }
 
+        GUI.enabled = true;
+
+        //Nova Coluna
+        offsetX += 300;
+        offsetY = 35;
         var tempBool = _settings.UseDiffuse;
         _settings.UseDiffuse = GUI.Toggle(new Rect(offsetX, offsetY, 280, 30), _settings.UseDiffuse,
             " Shape from Diffuse (Unchecked from Height)");
         if (tempBool != _settings.UseDiffuse) _doStuff = true;
-        offsetY += 30;
 
-        GUI.enabled = true;
-
-        GUI.Label(new Rect(offsetX, offsetY, 280, 30), " Shape Recognition, Rotation, Spread, Bias");
         offsetY += 30;
-        if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), _settings.ShapeRecognition,
-            out _settings.ShapeRecognition, 0.0f, 1.0f)) _doStuff = true;
-        offsetY += 25;
-        if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), _settings.LightRotation,
-            out _settings.LightRotation, -3.14f, 3.14f)) _doStuff = true;
-        offsetY += 25;
-        if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), _settings.SlopeBlur,
-            out _settings.SlopeBlur, 5, 100)) _doStuff = true;
-        offsetY += 25;
-        if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), _settings.ShapeBias,
-            out _settings.ShapeBias, 0.0f, 1.0f)) _doStuff = true;
-        offsetY += 30;
+        if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Shape Recognition",
+                _settings.ShapeRecognition, out _settings.ShapeRecognition, 0.0f, 1.0f))
+            _doStuff = true;
+        offsetY += 40;
+        if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Light Rotation",
+                _settings.LightRotation, out _settings.LightRotation, -3.14f, 3.14f))
+            _doStuff = true;
+        offsetY += 40;
+        if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Slope Blur", _settings.SlopeBlur,
+                out _settings.SlopeBlur, 5, 100))
+            _doStuff = true;
+        offsetY += 40;
+        if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Shape Bias", _settings.ShapeBias,
+                out _settings.ShapeBias, 0.0f, 1.0f))
+            _doStuff = true;
+        offsetY += 40;
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Final Contrast", _settings.FinalContrast,
-            out _settings.FinalContrast, 0.0f, 10.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Final Contrast",
+            _settings.FinalContrast, out _settings.FinalContrast, 0.0f, 10.0f);
         offsetY += 50;
 
         if (GUI.Button(new Rect(offsetX + 10, offsetY, 130, 30), "Reset to Defaults"))
@@ -287,16 +281,16 @@ public class NormalFromHeightGui : MonoBehaviour
             //StartCoroutine(ProcessDiffuse());
         }
 
-        if (GUI.Button(new Rect(offsetX + 150, offsetY, 130, 30), "Set as Normal Map")) StartCoroutine(ProcessNormal());
+        if (GUI.Button(new Rect(offsetX + 150, offsetY, 130, 30), "Set as Normal Map"))
+            StartCoroutine(ProcessNormal());
 
         GUI.DragWindow();
+        _windowRect.width = offsetX + 300;
+        _windowRect.height = offsetY + 100;
     }
 
     private void OnGUI()
     {
-        _windowRect.width = 300;
-        _windowRect.height = 630;
-
         _windowRect = GUI.Window(16, _windowRect, DoMyWindow, "Normal From Height");
     }
 
@@ -317,23 +311,23 @@ public class NormalFromHeightGui : MonoBehaviour
         Debug.Log("Initializing Textures of size: " + _imageSizeX + "x" + _imageSizeY);
 
         _tempBlurMap = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.ARGBHalf,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
         HeightBlurMap = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.RHalf,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
         _blurMap0 = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.ARGBHalf,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
         _blurMap1 = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.ARGBHalf,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
         _blurMap2 = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.ARGBHalf,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
         _blurMap3 = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.ARGBHalf,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
         _blurMap4 = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.ARGBHalf,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
         _blurMap5 = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.ARGBHalf,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
         _blurMap6 = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.ARGBHalf,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
     }
 
     public void Close()
@@ -364,10 +358,7 @@ public class NormalFromHeightGui : MonoBehaviour
         CleanupTexture(_tempNormalMap);
     }
 
-    public void StartProcessNormal()
-    {
-        StartCoroutine(ProcessNormal());
-    }
+    public void StartProcessNormal() { StartCoroutine(ProcessNormal()); }
 
     public IEnumerator ProcessNormal()
     {
@@ -403,14 +394,16 @@ public class NormalFromHeightGui : MonoBehaviour
 
         CleanupTexture(_tempNormalMap);
         _tempNormalMap = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.ARGB32,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
         Graphics.Blit(_blurMap0, _tempNormalMap, _blitMaterial, 4);
 
         if (_mgs.NormalMap) Destroy(_mgs.NormalMap);
 
         RenderTexture.active = _tempNormalMap;
-        _mgs.NormalMap = new Texture2D(_tempNormalMap.width, _tempNormalMap.height, TextureFormat.ARGB32, true, true);
-        _mgs.NormalMap.ReadPixels(new Rect(0, 0, _tempNormalMap.width, _tempNormalMap.height), 0, 0);
+        _mgs.NormalMap = new Texture2D(_tempNormalMap.width, _tempNormalMap.height,
+            TextureFormat.ARGB32, true, true);
+        _mgs.NormalMap.ReadPixels(new Rect(0, 0, _tempNormalMap.width, _tempNormalMap.height), 0,
+            0);
         _mgs.NormalMap.Apply();
 
         yield return new WaitForSeconds(0.1f);
@@ -439,16 +432,14 @@ public class NormalFromHeightGui : MonoBehaviour
             _blitMaterial.SetInt("_Desaturate", 1);
             Graphics.Blit(_mgs.DiffuseMapOriginal, _tempBlurMap, _blitMaterial, 1);
             _blitMaterial.SetTexture("_LightTex", _mgs.DiffuseMapOriginal);
-        }
-        else
+        } else
         {
             if (_mgs.HdHeightMap == null)
             {
                 _blitMaterial.SetInt("_Desaturate", 0);
                 Graphics.Blit(_mgs.HeightMap, _tempBlurMap, _blitMaterial, 1);
                 _blitMaterial.SetTexture("_LightTex", _mgs.HeightMap);
-            }
-            else
+            } else
             {
                 _blitMaterial.SetInt("_Desaturate", 0);
                 Graphics.Blit(_mgs.HdHeightMap, _tempBlurMap, _blitMaterial, 1);

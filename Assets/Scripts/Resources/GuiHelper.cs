@@ -2,21 +2,26 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
+using OBJ_IO.Plugins.Extension;
 using UnityEngine;
+
+// ReSharper disable ExplicitCallerInfoArgument
 
 #endregion
 
 public static class GuiHelper
 {
-    private static readonly Dictionary<string, string> TextFields = new Dictionary<string, string>();
+    private static readonly Dictionary<string, string> TextFields = new();
 
     public static bool Slider(Rect rect, int value, out int outValue, int minValue, int maxValue,
-        [System.Runtime.CompilerServices.CallerMemberName]
+        [CallerMemberName]
         string memberName = "",
-        [System.Runtime.CompilerServices.CallerFilePath]
+        [CallerFilePath]
         string sourceFilePath = "",
-        [System.Runtime.CompilerServices.CallerLineNumber]
+        [CallerLineNumber]
         int sourceLineNumber = 0)
     {
         var res = Slider(rect, null, value, out var outValueFloat, minValue, maxValue, memberName, sourceFilePath,
@@ -26,11 +31,11 @@ public static class GuiHelper
     }
 
     public static bool Slider(Rect rect, float value, out float outValue, float minValue, float maxValue,
-        [System.Runtime.CompilerServices.CallerMemberName]
+        [CallerMemberName]
         string memberName = "",
-        [System.Runtime.CompilerServices.CallerFilePath]
+        [CallerFilePath]
         string sourceFilePath = "",
-        [System.Runtime.CompilerServices.CallerLineNumber]
+        [CallerLineNumber]
         int sourceLineNumber = 0)
     {
         var res = Slider(rect, null, value, out var outValue2, minValue, maxValue, memberName, sourceFilePath,
@@ -40,11 +45,11 @@ public static class GuiHelper
     }
 
     public static bool Slider(Rect rect, string title, int value, out int outValue, int minValue, int maxValue,
-        [System.Runtime.CompilerServices.CallerMemberName]
+        [CallerMemberName]
         string memberName = "",
-        [System.Runtime.CompilerServices.CallerFilePath]
+        [CallerFilePath]
         string sourceFilePath = "",
-        [System.Runtime.CompilerServices.CallerLineNumber]
+        [CallerLineNumber]
         int sourceLineNumber = 0)
     {
         var res = Slider(rect, title, value, out float outValueFloat, minValue, maxValue, memberName, sourceFilePath,
@@ -55,11 +60,11 @@ public static class GuiHelper
     }
 
     public static bool Slider(Rect rect, string title, int value, string inText, out int outValue,
-        out string outText, int minValue, int maxValue, [System.Runtime.CompilerServices.CallerMemberName]
+        out string outText, int minValue, int maxValue, [CallerMemberName]
         string memberName = "",
-        [System.Runtime.CompilerServices.CallerFilePath]
+        [CallerFilePath]
         string sourceFilePath = "",
-        [System.Runtime.CompilerServices.CallerLineNumber]
+        [CallerLineNumber]
         int sourceLineNumber = 0)
     {
         var ret = Slider(rect, title, value, out outValue, minValue, maxValue, memberName, sourceFilePath,
@@ -70,11 +75,11 @@ public static class GuiHelper
     }
 
     public static bool Slider(Rect rect, [CanBeNull] string title, float value, out float outValue, float minValue,
-        float maxValue, [System.Runtime.CompilerServices.CallerMemberName]
+        float maxValue, [CallerMemberName]
         string memberName = "",
-        [System.Runtime.CompilerServices.CallerFilePath]
+        [CallerFilePath]
         string sourceFilePath = "",
-        [System.Runtime.CompilerServices.CallerLineNumber]
+        [CallerLineNumber]
         int sourceLineNumber = 0)
     {
         const float tolerance = 0.001f;
@@ -100,7 +105,7 @@ public static class GuiHelper
         }
         else
         {
-            textValue = value.ToString();
+            textValue = value.ToString(CultureInfo.CurrentCulture);
             TextFields.Add(handle, textValue);
         }
 
@@ -117,13 +122,13 @@ public static class GuiHelper
                 if (Math.Abs(result - value) > tolerance)
                 {
                     value = Mathf.Clamp(result, minValue, maxValue);
-                    textValue = value.ToString();
+                    textValue = value.ToString(CultureInfo.CurrentCulture);
                 }
             }
         }
         else
         {
-            textValue = value.ToString(); 
+            textValue = value.ToString(CultureInfo.CurrentCulture); 
         }
 
 

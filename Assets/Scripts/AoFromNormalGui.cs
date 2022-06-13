@@ -32,7 +32,7 @@ public class AoFromNormalGui : MonoBehaviour
     private bool _settingsInitialized;
     private RenderTexture _tempAoMap;
 
-    private Rect _windowRect = new Rect(30, 300, 300, 230);
+    private Rect _windowRect = new(30, 300, 300, 230);
     private RenderTexture _workingAoMap;
 
     [HideInInspector] public bool Busy;

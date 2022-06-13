@@ -3,6 +3,7 @@
 using System.IO;
 using System.Xml.Serialization;
 using UnityEngine;
+using Utility;
 
 #endregion
 
@@ -27,15 +28,15 @@ public class SettingsGui : MonoBehaviour
     private static readonly int FlipNormalY = Shader.PropertyToID("_FlipNormalY");
     private bool _windowOpen;
 
-    private Rect _windowRect = new Rect(Screen.width - 300, Screen.height - 320, 280, 600);
+    private Rect _windowRect = new(Screen.width - 300, Screen.height - 320, 280, 600);
     public PostProcessGui PostProcessGui;
-    [HideInInspector] public Settings Settings = new Settings();
-    public ObjRotator OBJRotator;
+    public Settings Settings = new();
+    public ObjectZoomPanRotate ObjectZoomPanRotator;
 
     private void Start()
     {
         Instance = this;
-        
+
         LoadSettings();
     }
 
@@ -45,12 +46,9 @@ public class SettingsGui : MonoBehaviour
         {
             var set = PlayerPrefs.GetString(SettingsKey);
             var serializer = new XmlSerializer(typeof(Settings));
-            using (TextReader sr = new StringReader(set))
-            {
-                Settings = serializer.Deserialize(sr) as Settings;
-            }
-        }
-        else
+            using TextReader sr = new StringReader(set);
+            Settings = serializer.Deserialize(sr) as Settings;
+        } else
         {
             Settings.NormalMapMaxStyle = true;
             Settings.NormalMapMayaStyle = false;
@@ -68,11 +66,9 @@ public class SettingsGui : MonoBehaviour
     private void SaveSettings()
     {
         var serializer = new XmlSerializer(typeof(Settings));
-        using (TextWriter sw = new StringWriter())
-        {
-            serializer.Serialize(sw, Settings);
-            PlayerPrefs.SetString(SettingsKey, sw.ToString());
-        }
+        using TextWriter sw = new StringWriter();
+        serializer.Serialize(sw, Settings);
+        PlayerPrefs.SetString(SettingsKey, sw.ToString());
     }
 
     private void SetNormalMode()
@@ -86,11 +82,7 @@ public class SettingsGui : MonoBehaviour
     public void SetSettings()
     {
         SetNormalMode();
-
-        if (Settings.PostProcessEnabled)
-            PostProcessGui.PostProcessOn();
-        else
-            PostProcessGui.PostProcessOff();
+        SetPostProcess();
 
         var mainGui = MainGui.Instance;
         mainGui.PropRed = Settings.PropRed;
@@ -100,13 +92,22 @@ public class SettingsGui : MonoBehaviour
         mainGui.SetFormat(Settings.FileFormat);
     }
 
+    public void SetPostProcess()
+    {
+        if (Settings.PostProcessEnabled)
+            PostProcessGui.PostProcessOn();
+        else
+            PostProcessGui.PostProcessOff();
+    }
+
     private void DoMyWindow(int windowId)
     {
         const int offsetX = 10;
 
         var offsetY = 30;
 
-        OBJRotator.AllowHideUI =  GUI.Toggle(new Rect(offsetX, offsetY, 150, 30), OBJRotator.AllowHideUI, "Hide UI On Rotate");
+        ObjectZoomPanRotator.AllowHide = GUI.Toggle(new Rect(offsetX, offsetY, 150, 30),
+            ObjectZoomPanRotator.AllowHide, "Hide UI On Rotate");
 
         offsetY += 20;
 
@@ -114,19 +115,19 @@ public class SettingsGui : MonoBehaviour
 
         offsetY += 30;
 
-        Settings.NormalMapMaxStyle =
-            GUI.Toggle(new Rect(offsetX, offsetY, 100, 30), Settings.NormalMapMaxStyle, " Max Style");
+        Settings.NormalMapMaxStyle = GUI.Toggle(new Rect(offsetX, offsetY, 100, 30),
+            Settings.NormalMapMaxStyle, " Max Style");
         Settings.NormalMapMayaStyle = !Settings.NormalMapMaxStyle;
 
 
-        Settings.NormalMapMayaStyle = GUI.Toggle(new Rect(offsetX + 100, offsetY, 100, 30), Settings.NormalMapMayaStyle,
-            " Maya Style");
+        Settings.NormalMapMayaStyle = GUI.Toggle(new Rect(offsetX + 100, offsetY, 100, 30),
+            Settings.NormalMapMayaStyle, " Maya Style");
         Settings.NormalMapMaxStyle = !Settings.NormalMapMayaStyle;
 
         offsetY += 30;
 
-        Settings.PostProcessEnabled = GUI.Toggle(new Rect(offsetX, offsetY, 280, 30), Settings.PostProcessEnabled,
-            " Enable Post Process By Default");
+        Settings.PostProcessEnabled = GUI.Toggle(new Rect(offsetX, offsetY, 280, 30),
+            Settings.PostProcessEnabled, " Enable Post Process By Default");
 
         offsetY += 20;
         GUI.Label(new Rect(offsetX, offsetY, 250, 30), "Limit Frame Rate");
@@ -140,6 +141,7 @@ public class SettingsGui : MonoBehaviour
             PlayerPrefs.SetInt("targetFrameRate", 30);
             PlayerPrefs.SetInt("Vsync", 0);
         }
+
         if (GUI.Button(new Rect(offsetX + 80, offsetY, 30, 30), "60"))
         {
             Application.targetFrameRate = 60;
@@ -147,6 +149,7 @@ public class SettingsGui : MonoBehaviour
             PlayerPrefs.SetInt("targetFrameRate", 60);
             PlayerPrefs.SetInt("Vsync", 0);
         }
+
         if (GUI.Button(new Rect(offsetX + 120, offsetY, 30, 30), "120"))
         {
             Application.targetFrameRate = 120;
@@ -159,7 +162,7 @@ public class SettingsGui : MonoBehaviour
         {
             //Application.targetFrameRate = 120;
             QualitySettings.vSyncCount = 1;
-           // PlayerPrefs.SetInt("targetFrameRate", 30);
+            // PlayerPrefs.SetInt("targetFrameRate", 30);
             PlayerPrefs.SetInt("Vsync", 1);
         }
 
@@ -194,15 +197,16 @@ public class SettingsGui : MonoBehaviour
     {
         _windowRect = new Rect(Screen.width - 300, Screen.height - 360, 280, 300);
 
-        if (_windowOpen) _windowRect = GUI.Window(20, _windowRect, DoMyWindow, "Setting and Preferences");
+        if (_windowOpen)
+            _windowRect = GUI.Window(20, _windowRect, DoMyWindow, "Setting and Preferences");
 
-        if (!GUI.Button(new Rect(Screen.width - 280, Screen.height - 40, 80, 30), "Settings")) return;
+        if (!GUI.Button(new Rect(Screen.width - 280, Screen.height - 40, 80, 30), "Settings"))
+            return;
         if (_windowOpen)
         {
             SaveSettings();
             _windowOpen = false;
-        }
-        else
+        } else
         {
             _windowOpen = true;
         }

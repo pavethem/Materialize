@@ -1,42 +1,45 @@
 ﻿
 using UnityEngine;
 
-public class OBJMaterial
+namespace OBJ_IO.Plugins.Mesh.OBJ
 {
-    //------------------------------------------------------------------------------------------------------------
-    public OBJMaterial(string lMaterialName)
+    public class ObjMaterial
     {
-        m_Name = lMaterialName;
+        //------------------------------------------------------------------------------------------------------------
+        public ObjMaterial(string lMaterialName)
+        {
+            MName = lMaterialName;
+        }
+
+        //------------------------------------------------------------------------------------------------------------
+        public string MName;
+
+        //------------------------------------------------------------------------------------------------------------
+        public Color MAmbientColor;
+        public Color MDiffuseColor;
+        public Color MSpecularColor;
+        public float MSpecularCoefficient;
+
+        //------------------------------------------------------------------------------------------------------------
+        public float MTransparency;
+
+        //------------------------------------------------------------------------------------------------------------
+        public int MIlluminationModel;
+
+        //------------------------------------------------------------------------------------------------------------
+        public string MAmbientTextureMap;
+        public string MDiffuseTextureMap;
+
+        //------------------------------------------------------------------------------------------------------------
+        public string MSpecularTextureMap;
+        public string MSpecularHighlightTextureMap;
+
+        //------------------------------------------------------------------------------------------------------------
+        public string MBumpMap;
+        public string MDisplacementMap;
+        public string MStencilDecalMap;
+
+        //------------------------------------------------------------------------------------------------------------
+        public string MAlphaTextureMap;
     }
-
-    //------------------------------------------------------------------------------------------------------------
-    public string m_Name;
-
-    //------------------------------------------------------------------------------------------------------------
-    public Color m_AmbientColor;
-    public Color m_DiffuseColor;
-    public Color m_SpecularColor;
-    public float m_SpecularCoefficient;
-
-    //------------------------------------------------------------------------------------------------------------
-    public float m_Transparency;
-
-    //------------------------------------------------------------------------------------------------------------
-    public int m_IlluminationModel;
-
-    //------------------------------------------------------------------------------------------------------------
-    public string m_AmbientTextureMap;
-    public string m_DiffuseTextureMap;
-
-    //------------------------------------------------------------------------------------------------------------
-    public string m_SpecularTextureMap;
-    public string m_SpecularHighlightTextureMap;
-
-    //------------------------------------------------------------------------------------------------------------
-    public string m_BumpMap;
-    public string m_DisplacementMap;
-    public string m_StencilDecalMap;
-
-    //------------------------------------------------------------------------------------------------------------
-    public string m_AlphaTextureMap;
 }

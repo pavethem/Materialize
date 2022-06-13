@@ -2,6 +2,7 @@
 
 using System.ComponentModel;
 using UnityEngine;
+using Utility;
 
 #endregion
 
@@ -80,7 +81,7 @@ public class MaterialGui : MonoBehaviour
 
     private MainGui _mainGuiScript;
 
-    private MaterialSettings _materialSettings;
+    private MaterialSettings _materialSettings = new();
     private Texture2D _metallicMap;
 
     private Texture2D _myColorTexture;
@@ -94,7 +95,7 @@ public class MaterialGui : MonoBehaviour
 
     private Material _thisMaterial;
 
-    private Rect _windowRect = new Rect(30, 300, 300, 530);
+    private Rect _windowRect = new(30, 300, 300, 530);
 
     public GameObject LightObject;
     public GameObject TestObject;
@@ -103,7 +104,7 @@ public class MaterialGui : MonoBehaviour
 
     public GameObject TestObjectParent;
     public GameObject TestObjectSphere;
-    public ObjRotator TestRotator;
+    public ObjectZoomPanRotate TestRotator;
 
     private void OnDisable()
     {

@@ -1,23 +1,27 @@
-﻿public class OBJFaceVertex
+﻿// ReSharper disable NonReadonlyMemberInGetHashCode
+
+namespace OBJ_IO.Plugins.Mesh.OBJ
 {
-    //------------------------------------------------------------------------------------------------------------
-    public int m_VertexIndex = -1;
-    public int m_UVIndex = -1;
-    public int m_UV2Index = -1;
-    public int m_NormalIndex = -1;
-    public int m_ColorIndex = -1;
-
-    public override int GetHashCode()
+    public class ObjFaceVertex
     {
-        return m_VertexIndex ^ m_UVIndex ^ m_UV2Index ^ m_NormalIndex ^ m_ColorIndex;
-    }
+        //------------------------------------------------------------------------------------------------------------
+        public int MVertexIndex = -1;
+        public int MUvIndex = -1;
+        public int MUv2Index = -1;
+        public int MNormalIndex = -1;
+        public int MColorIndex = -1;
 
-    public override bool Equals(object obj)
-    {
-        OBJFaceVertex faceVertex = (OBJFaceVertex) obj;
-        return m_VertexIndex == faceVertex.m_VertexIndex
-               && m_UVIndex == faceVertex.m_UVIndex
-               && m_UV2Index == faceVertex.m_UV2Index
-               && m_NormalIndex == faceVertex.m_NormalIndex;
+        public override int GetHashCode()
+        {
+            return MVertexIndex ^ MUvIndex ^ MUv2Index ^ MNormalIndex ^ MColorIndex;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var faceVertex = (ObjFaceVertex)obj;
+            return faceVertex != null && MVertexIndex == faceVertex.MVertexIndex &&
+                   MUvIndex == faceVertex.MUvIndex && MUv2Index == faceVertex.MUv2Index &&
+                   MNormalIndex == faceVertex.MNormalIndex;
+        }
     }
 }

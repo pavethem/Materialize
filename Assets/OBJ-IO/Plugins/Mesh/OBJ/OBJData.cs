@@ -1,18 +1,19 @@
-﻿
-using System.Collections.Generic;
-
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class OBJData
+namespace OBJ_IO.Plugins.Mesh.OBJ
 {
-    //------------------------------------------------------------------------------------------------------------
-    public List<Vector3> m_Vertices = new List<Vector3>();
-    public List<Vector3> m_Normals = new List<Vector3>();
-    public List<Vector2> m_UVs = new List<Vector2>();
-    public List<Vector2> m_UV2s = new List<Vector2>();
-    public List<Color> m_Colors = new List<Color>();
+    public class ObjData
+    {
+        //------------------------------------------------------------------------------------------------------------
+        public List<Vector3> MVertices = new();
+        public List<Vector3> MNormals = new();
+        public List<Vector2> MUvs = new();
+        public List<Vector2> MUv2S = new();
+        public List<Color> MColors = new();
 
-    //------------------------------------------------------------------------------------------------------------
-    public List<OBJMaterial> m_Materials = new List<OBJMaterial>();
-    public List<OBJGroup> m_Groups = new List<OBJGroup>();
+        //------------------------------------------------------------------------------------------------------------
+        public readonly List<ObjMaterial> MMaterials = new();
+        public readonly List<ObjGroup> MGroups = new();
+    }
 }

@@ -4,8 +4,10 @@ using UnityEngine;
 
 #endregion
 
-public class TextureImportTest : MonoBehaviour
+namespace Editor
 {
+    public class TextureImportTest : MonoBehaviour
+    {
 //	// Use this for initialization
 //	void Start () {
 //
@@ -20,4 +22,5 @@ public class TextureImportTest : MonoBehaviour
 //	void Update () {
 //	
 //	}
+    }
 }

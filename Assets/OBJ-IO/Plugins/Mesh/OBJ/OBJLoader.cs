@@ -1,219 +1,202 @@
-﻿
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
-
+using OBJ_IO.Plugins.Extension;
 using UnityEngine;
 
-using UnityExtension;
+// ReSharper disable StringLiteralTypo
 
 /*
- * Currently only supports Triangluar Meshes
+ * Currently only supports Triangular Meshes
  */
 
-public class OBJLoader
+namespace OBJ_IO.Plugins.Mesh.OBJ
 {
-    //------------------------------------------------------------------------------------------------------------
-    private static OBJData m_OBJData = null;
-
-    //------------------------------------------------------------------------------------------------------------
-    private static OBJMaterial m_CurrentMaterial = null;
-    private static OBJGroup m_CurrentGroup = null;
-
-    #region PROCESSORS
-
-    //------------------------------------------------------------------------------------------------------------
-    private static readonly Dictionary<string, Action<string>> m_ParseOBJActionDictionary = new Dictionary<string, Action<string>>
+    public static class ObjLoader
     {
-        { "mtllib", (lEntry) => { /*Load MTL*/ } }, 
-        { "usemtl",  (lEntry) => { PushOBJGroupIfNeeded(); m_CurrentGroup.m_Material = m_OBJData.m_Materials.SingleOrDefault((lX) => { return lX.m_Name.EqualsInvariantCultureIgnoreCase(lEntry); }); } },
-        { "v", (lEntry) => { m_OBJData.m_Vertices.Add(Utils.ParseVector3String(lEntry)); } },
-        { "vn", (lEntry) => { m_OBJData.m_Normals.Add(Utils.ParseVector3String(lEntry)); } },
-        { "vt", (lEntry) => { m_OBJData.m_UVs.Add(Utils.ParseVector2String(lEntry)); } },
-        { "vt2", (lEntry) => { m_OBJData.m_UV2s.Add(Utils.ParseVector2String(lEntry)); } },
-        { "vc", (lEntry) => { m_OBJData.m_Colors.Add(Utils.ParseVector4String(lEntry).ToColor()); } },
-		{ "f", PushOBJFace },
-        { "g", PushOBJGroup },
-    };
+        //------------------------------------------------------------------------------------------------------------
+        private static ObjData _mObjData;
 
-    //------------------------------------------------------------------------------------------------------------
-    private static readonly Dictionary<string, Action<string>> m_ParseMTLActionDictionary = new Dictionary<string, Action<string>>
-    {
-        { "newmtl", PushOBJMaterial },
-        { "Ka", (lEntry) => { m_CurrentMaterial.m_AmbientColor = Utils.ParseVector3String(lEntry).ToColor(); } },
-        { "Kd", (lEntry) => { m_CurrentMaterial.m_DiffuseColor = Utils.ParseVector3String(lEntry).ToColor(); } },
-        { "Ks", (lEntry) => { m_CurrentMaterial.m_SpecularColor = Utils.ParseVector3String(lEntry).ToColor(); } },
-        { "Ns", (lEntry) => { m_CurrentMaterial.m_SpecularCoefficient = lEntry.ParseInvariantFloat(); } },
-        { "d", (lEntry) => { m_CurrentMaterial.m_Transparency = lEntry.ParseInvariantFloat(); } },
-        { "Tr", (lEntry) => { m_CurrentMaterial.m_Transparency = lEntry.ParseInvariantFloat(); } },
-        { "illum", (lEntry) => { m_CurrentMaterial.m_IlluminationModel = lEntry.ParseInvariantInt(); } },
-        { "map_Ka", (lEntry) => { m_CurrentMaterial.m_AmbientTextureMap = lEntry; } },
-        { "map_Kd", (lEntry) => { m_CurrentMaterial.m_DiffuseTextureMap = lEntry; } },
-        { "map_Ks", (lEntry) => { m_CurrentMaterial.m_SpecularTextureMap = lEntry; } },
-        { "map_Ns", (lEntry) => { m_CurrentMaterial.m_SpecularHighlightTextureMap = lEntry; } },
-        { "map_d", (lEntry) => { m_CurrentMaterial.m_AlphaTextureMap = lEntry; } },
-        { "map_bump", (lEntry) => { m_CurrentMaterial.m_BumpMap = lEntry; } },
-        { "bump", (lEntry) => { m_CurrentMaterial.m_BumpMap = lEntry; } },
-        { "disp", (lEntry) => { m_CurrentMaterial.m_DisplacementMap = lEntry; } },
-        { "decal",(lEntry) => { m_CurrentMaterial.m_StencilDecalMap = lEntry; } },
-    };
+        //------------------------------------------------------------------------------------------------------------
+        private static ObjGroup _mCurrentGroup;
 
-    #endregion
+        #region PROCESSORS
 
-    #region PUBLIC_INTERFACE
-
-    //------------------------------------------------------------------------------------------------------------
-    public static OBJData LoadOBJ(Stream lStream)
-    {
-        m_OBJData = new OBJData();
-
-        m_CurrentMaterial = null;
-        m_CurrentGroup = null;
-
-        StreamReader lLineStreamReader = new StreamReader(lStream);
-
-        Action<string> lAction = null;
-        string lCurrentLine = null;
-        string[] lFields = null;
-        string lKeyword = null;
-        string lData = null;
-
-        while (!lLineStreamReader.EndOfStream)
+        //------------------------------------------------------------------------------------------------------------
+        private static readonly Dictionary<string, Action<string>> MParseObjActionDictionary = new()
         {
-            lCurrentLine = lLineStreamReader.ReadLine();
-
-            if (StringExt.IsNullOrWhiteSpace(lCurrentLine) 
-                || lCurrentLine[0] == '#')
             {
-                continue;
+                "mtllib", _ =>
+                {
+                    /*Load MTL*/
+                }
+            },
+            {
+                "usemtl", lEntry =>
+                {
+                    PushObjGroupIfNeeded();
+                    _mCurrentGroup.MMaterial = _mObjData.MMaterials.SingleOrDefault(lX =>
+                        lX.MName.EqualsInvariantCultureIgnoreCase(lEntry));
+                }
+            },
+            {
+                "v",
+                lEntry => { _mObjData.MVertices.Add(Extension.Utils.ParseVector3String(lEntry)); }
+            },
+            {
+                "vn",
+                lEntry => { _mObjData.MNormals.Add(Extension.Utils.ParseVector3String(lEntry)); }
+            },
+            {
+                "vt",
+                lEntry => { _mObjData.MUvs.Add(Extension.Utils.ParseVector2String(lEntry)); }
+            },
+            {
+                "vt2",
+                lEntry => { _mObjData.MUv2S.Add(Extension.Utils.ParseVector2String(lEntry)); }
+            },
+            {
+                "vc",
+                lEntry =>
+                {
+                    _mObjData.MColors.Add(Extension.Utils.ParseVector4String(lEntry).ToColor());
+                }
+            },
+            { "f", PushObjFace },
+            { "g", PushObjGroup },
+        };
+
+        //------------------------------------------------------------------------------------------------------------
+
+        #endregion
+
+        #region PUBLIC_INTERFACE
+
+        //------------------------------------------------------------------------------------------------------------
+        public static ObjData LoadObj(Stream lStream)
+        {
+            _mObjData = new ObjData();
+            _mCurrentGroup = null;
+
+            var lLineStreamReader = new StreamReader(lStream);
+
+            while (!lLineStreamReader.EndOfStream)
+            {
+                var lCurrentLine = lLineStreamReader.ReadLine();
+
+                if (lCurrentLine != null && (StringExt.IsNullOrWhiteSpace(lCurrentLine) ||
+                                             lCurrentLine[0] == '#'))
+                {
+                    continue;
+                }
+
+                if (lCurrentLine == null) continue;
+                var lFields = lCurrentLine.Trim().Split(null, 2);
+                if (lFields.Length < 2)
+                {
+                    continue;
+                }
+
+                var lKeyword = lFields[0].Trim();
+                var lData = lFields[1].Trim();
+
+                MParseObjActionDictionary.TryGetValue(lKeyword.ToLowerInvariant(), out var lAction);
+
+                lAction?.Invoke(lData);
             }
 
-            lFields = lCurrentLine.Trim().Split(null, 2);
-            if (lFields.Length < 2)
+            var lObjData = _mObjData;
+            _mObjData = null;
+
+            return lObjData;
+        }
+
+        //------------------------------------------------------------------------------------------------------------
+        public static void ExportObj(ObjData lData, Stream lStream)
+        {
+            var lLineStreamWriter = new StreamWriter(lStream);
+
+            lLineStreamWriter.WriteLine(
+                $"# File exported by Unity3D version {Application.unityVersion}");
+
+            for (var lCount = 0; lCount < lData.MVertices.Count; ++lCount)
             {
-                continue;
+                lLineStreamWriter.WriteLine(
+                    $"v {lData.MVertices[lCount].x:n8} {lData.MVertices[lCount].y:n8} {lData.MVertices[lCount].z:n8}");
             }
 
-            lKeyword = lFields[0].Trim();
-            lData = lFields[1].Trim();
-
-            lAction = null;
-            m_ParseOBJActionDictionary.TryGetValue(lKeyword.ToLowerInvariant(), out lAction);
-
-            if (lAction != null)
+            for (var lCount = 0; lCount < lData.MUvs.Count; ++lCount)
             {
-                lAction(lData);
+                lLineStreamWriter.WriteLine(
+                    $"vt {lData.MUvs[lCount].x:n5} {lData.MUvs[lCount].y:n5}");
             }
-        }
 
-        var lOBJData = m_OBJData;
-        m_OBJData = null;
-
-        return lOBJData; 
-    }
-
-    //------------------------------------------------------------------------------------------------------------
-    public static void ExportOBJ(OBJData lData, Stream lStream)
-    {
-        StreamWriter lLineStreamWriter = new StreamWriter(lStream);
-
-        lLineStreamWriter.WriteLine(string.Format("# File exported by Unity3D version {0}", Application.unityVersion));
-
-        for (int lCount = 0; lCount < lData.m_Vertices.Count; ++lCount)
-        {
-            lLineStreamWriter.WriteLine(string.Format("v {0} {1} {2}",
-                lData.m_Vertices[lCount].x.ToString("n8"),
-                lData.m_Vertices[lCount].y.ToString("n8"),
-                lData.m_Vertices[lCount].z.ToString("n8")));
-        }
-
-        for (int lCount = 0; lCount < lData.m_UVs.Count; ++lCount)
-        {
-            lLineStreamWriter.WriteLine(string.Format("vt {0} {1}",
-                lData.m_UVs[lCount].x.ToString("n5"),
-                lData.m_UVs[lCount].y.ToString("n5")));
-        }
-
-        for (int lCount = 0; lCount < lData.m_UV2s.Count; ++lCount)
-        {
-            lLineStreamWriter.WriteLine(string.Format("vt2 {0} {1}",
-                lData.m_UVs[lCount].x.ToString("n5"),
-                lData.m_UVs[lCount].y.ToString("n5")));
-        }
-
-        for (int lCount = 0; lCount < lData.m_Normals.Count; ++lCount)
-        {
-            lLineStreamWriter.WriteLine(string.Format("vn {0} {1} {2}",
-                lData.m_Normals[lCount].x.ToString("n8"),
-                lData.m_Normals[lCount].y.ToString("n8"),
-                lData.m_Normals[lCount].z.ToString("n8")));
-        }
-
-        for (int lCount = 0; lCount < lData.m_Colors.Count; ++lCount)
-        {
-            lLineStreamWriter.WriteLine(string.Format("vc {0} {1} {2} {3}",
-                lData.m_Colors[lCount].r.ToString("n8"),
-                lData.m_Colors[lCount].g.ToString("n8"),
-                lData.m_Colors[lCount].b.ToString("n8"),
-                lData.m_Colors[lCount].a.ToString("n8")));
-        }
-
-        for (int lGroup = 0; lGroup < lData.m_Groups.Count; ++lGroup)
-        {
-            lLineStreamWriter.WriteLine(string.Format("g {0}", lData.m_Groups[lGroup].m_Name));
-
-            for (int lFace = 0; lFace < lData.m_Groups[lGroup].Faces.Count; ++lFace)
+            for (var lCount = 0; lCount < lData.MUv2S.Count; ++lCount)
             {
-                lLineStreamWriter.WriteLine(string.Format("f {0} {1} {2}",
-                    lData.m_Groups[lGroup].Faces[lFace].ToString(0),
-                    lData.m_Groups[lGroup].Faces[lFace].ToString(1),
-                    lData.m_Groups[lGroup].Faces[lFace].ToString(2)));
+                lLineStreamWriter.WriteLine(
+                    $"vt2 {lData.MUvs[lCount].x:n5} {lData.MUvs[lCount].y:n5}");
+            }
+
+            for (var lCount = 0; lCount < lData.MNormals.Count; ++lCount)
+            {
+                lLineStreamWriter.WriteLine(
+                    $"vn {lData.MNormals[lCount].x:n8} {lData.MNormals[lCount].y:n8} {lData.MNormals[lCount].z:n8}");
+            }
+
+            for (var lCount = 0; lCount < lData.MColors.Count; ++lCount)
+            {
+                lLineStreamWriter.WriteLine(
+                    $"vc {lData.MColors[lCount].r:n8} {lData.MColors[lCount].g:n8} {lData.MColors[lCount].b:n8} {lData.MColors[lCount].a:n8}");
+            }
+
+            foreach (var t in lData.MGroups)
+            {
+                lLineStreamWriter.WriteLine($"g {t.MName}");
+
+                foreach (var t1 in t.Faces)
+                {
+                    lLineStreamWriter.WriteLine(
+                        $"f {t1.ToString(0)} {t1.ToString(1)} {t1.ToString(2)}");
+                }
+            }
+
+            lLineStreamWriter.Flush();
+        }
+
+        #endregion
+
+        //------------------------------------------------------------------------------------------------------------
+        private static void PushObjGroup(string lGroupName)
+        {
+            _mCurrentGroup = new ObjGroup(lGroupName);
+            _mObjData.MGroups.Add(_mCurrentGroup);
+        }
+
+        //------------------------------------------------------------------------------------------------------------
+        private static void PushObjGroupIfNeeded()
+        {
+            if (_mCurrentGroup == null)
+            {
+                PushObjGroup("default");
             }
         }
 
-        lLineStreamWriter.Flush();
-    }
-
-    #endregion
-
-    //------------------------------------------------------------------------------------------------------------
-    private static void PushOBJMaterial(string lMaterialName)
-    {
-        m_CurrentMaterial = new OBJMaterial(lMaterialName);
-        m_OBJData.m_Materials.Add(m_CurrentMaterial);
-    }
-
-    //------------------------------------------------------------------------------------------------------------
-    private static void PushOBJGroup(string lGroupName)
-    {
-        m_CurrentGroup = new OBJGroup(lGroupName);
-        m_OBJData.m_Groups.Add(m_CurrentGroup);
-    }
-
-    //------------------------------------------------------------------------------------------------------------
-    private static void PushOBJGroupIfNeeded()
-    {
-        if (m_CurrentGroup == null)
+        //------------------------------------------------------------------------------------------------------------
+        private static void PushObjFace(string lFaceLine)
         {
-            PushOBJGroup("default");
+            PushObjGroupIfNeeded();
+
+            var vertices = lFaceLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var face = new ObjFace();
+
+            foreach (var vertexString in vertices)
+            {
+                face.ParseVertex(vertexString);
+            }
+
+            _mCurrentGroup.AddFace(face);
         }
-    }
-    
-    //------------------------------------------------------------------------------------------------------------
-    private static void PushOBJFace(string lFaceLine)
-    {
-		PushOBJGroupIfNeeded();
-
-        var vertices = lFaceLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-        var face = new OBJFace();
-
-        foreach (var vertexString in vertices)
-        {
-            face.ParseVertex(vertexString);
-        }
-
-        m_CurrentGroup.AddFace(face);
     }
 }
