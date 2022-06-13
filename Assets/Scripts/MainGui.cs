@@ -207,7 +207,12 @@ public class MainGui : MonoBehaviour
         HideGuiLocker.LockEmpty += LoadHideState;
     }
 
-    private void PrepareToCreate() { _postProcessGui.PostProcessOff(); }
+    private void PrepareToCreate()
+    {
+        CloseWindows();
+        FixSize();
+        _postProcessGui.PostProcessOff();
+    }
 
     private void SaveHideState()
     {
@@ -456,8 +461,6 @@ public class MainGui : MonoBehaviour
 
         if (GUI.Button(new Rect(offsetX + 5, offsetY + 220, 50, 20), "Create"))
         {
-            CloseWindows();
-            FixSize();
             PrepareToCreate();
             HeightFromDiffuseGuiObject.SetActive(true);
             HeightFromDiffuseGuiScript.NewTexture();
@@ -635,8 +638,6 @@ public class MainGui : MonoBehaviour
 
         if (GUI.Button(new Rect(offsetX + spacingX * 2 + 5, offsetY + 220, 50, 20), "Create"))
         {
-            CloseWindows();
-            FixSize();
             PrepareToCreate();
             NormalFromHeightGuiObject.SetActive(true);
             NormalFromHeightGuiScript.NewTexture();
@@ -718,8 +719,6 @@ public class MainGui : MonoBehaviour
 
         if (GUI.Button(new Rect(offsetX + spacingX * 3 + 5, offsetY + 220, 50, 20), "Create"))
         {
-            CloseWindows();
-            FixSize();
             PrepareToCreate();
             MetallicGuiObject.SetActive(true);
             MetallicGuiScript.NewTexture();
@@ -801,8 +800,6 @@ public class MainGui : MonoBehaviour
 
         if (GUI.Button(new Rect(offsetX + spacingX * 4 + 5, offsetY + 220, 50, 20), "Create"))
         {
-            CloseWindows();
-            FixSize();
             PrepareToCreate();
             SmoothnessGuiObject.SetActive(true);
             SmoothnessGuiScript.NewTexture();
@@ -880,8 +877,6 @@ public class MainGui : MonoBehaviour
 
         if (GUI.Button(new Rect(offsetX + spacingX * 5 + 5, offsetY + 220, 50, 20), "Create"))
         {
-            CloseWindows();
-            FixSize();
             PrepareToCreate();
             EdgeFromNormalGuiObject.SetActive(true);
             EdgeFromNormalGuiScript.NewTexture();
@@ -962,8 +957,6 @@ public class MainGui : MonoBehaviour
 
         if (GUI.Button(new Rect(offsetX + spacingX * 6 + 5, offsetY + 220, 50, 20), "Create"))
         {
-            CloseWindows();
-            FixSize();
             PrepareToCreate();
             AoFromNormalGuiObject.SetActive(true);
             AoFromNormalGuiScript.NewTexture();
@@ -1290,8 +1283,6 @@ public class MainGui : MonoBehaviour
 
         if (GUI.Button(new Rect(offsetX, offsetY, 60, 40), "Tile\r\nMaps"))
         {
-            CloseWindows();
-            FixSize();
             PrepareToCreate();
             TilingTextureMakerGuiObject.SetActive(true);
             _tilingTextureMakerGuiScript.Initialize();

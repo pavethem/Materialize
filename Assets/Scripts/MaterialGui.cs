@@ -108,9 +108,12 @@ public class MaterialGui : MonoBehaviour
 
     private void OnDisable()
     {
-        if (!_mainGuiScript.IsGuiHidden || TestObjectParent == null) return;
-        if (!TestObjectParent.activeSelf) TestRotator.Reset();
+        if (!_mainGuiScript.IsGuiHidden) ChangeToPlane();
+    }
 
+    public void ChangeToPlane()
+    {
+        TestRotator.Reset();
         TestObjectParent.SetActive(true);
         TestObjectCube.SetActive(false);
         TestObjectCylinder.SetActive(false);
@@ -135,8 +138,7 @@ public class MaterialGui : MonoBehaviour
         if (projectObject.MaterialSettings != null)
         {
             _materialSettings = projectObject.MaterialSettings;
-        }
-        else
+        } else
         {
             _settingsInitialized = false;
             InitializeSettings();
@@ -163,10 +165,11 @@ public class MaterialGui : MonoBehaviour
         _thisMaterial.SetFloat(AoPower, _materialSettings.AoPower);
 
         _thisMaterial.SetVector(Tiling,
-            new Vector4(_materialSettings.TexTilingX, _materialSettings.TexTilingY, _materialSettings.TexOffsetX,
-                _materialSettings.TexOffsetY));
+            new Vector4(_materialSettings.TexTilingX, _materialSettings.TexTilingY,
+                _materialSettings.TexOffsetX, _materialSettings.TexOffsetY));
 
-        _light.color = new Color(_materialSettings.LightR, _materialSettings.LightG, _materialSettings.LightB);
+        _light.color = new Color(_materialSettings.LightR, _materialSettings.LightG,
+            _materialSettings.LightB);
         _light.intensity = _materialSettings.LightIntensity;
 
         TestObjectParent.SetActive(_planeShown);
@@ -178,14 +181,14 @@ public class MaterialGui : MonoBehaviour
 
     private void ChooseLightColor(int posX, int posY)
     {
-        _materialSettings.LightR =
-            GUI.VerticalSlider(new Rect(posX + 10, posY + 5, 30, 100), _materialSettings.LightR, 1.0f, 0.0f);
-        _materialSettings.LightG =
-            GUI.VerticalSlider(new Rect(posX + 40, posY + 5, 30, 100), _materialSettings.LightG, 1.0f, 0.0f);
-        _materialSettings.LightB =
-            GUI.VerticalSlider(new Rect(posX + 70, posY + 5, 30, 100), _materialSettings.LightB, 1.0f, 0.0f);
-        _materialSettings.LightIntensity =
-            GUI.VerticalSlider(new Rect(posX + 120, posY + 5, 30, 100), _materialSettings.LightIntensity, 3.0f, 0.0f);
+        _materialSettings.LightR = GUI.VerticalSlider(new Rect(posX + 10, posY + 5, 30, 100),
+            _materialSettings.LightR, 1.0f, 0.0f);
+        _materialSettings.LightG = GUI.VerticalSlider(new Rect(posX + 40, posY + 5, 30, 100),
+            _materialSettings.LightG, 1.0f, 0.0f);
+        _materialSettings.LightB = GUI.VerticalSlider(new Rect(posX + 70, posY + 5, 30, 100),
+            _materialSettings.LightB, 1.0f, 0.0f);
+        _materialSettings.LightIntensity = GUI.VerticalSlider(
+            new Rect(posX + 120, posY + 5, 30, 100), _materialSettings.LightIntensity, 3.0f, 0.0f);
 
         GUI.Label(new Rect(posX + 10, posY + 110, 30, 30), "R");
         GUI.Label(new Rect(posX + 40, posY + 110, 30, 30), "G");
@@ -200,7 +203,8 @@ public class MaterialGui : MonoBehaviour
     private void SetColorTexture()
     {
         var colorArray = new Color[1];
-        colorArray[0] = new Color(_materialSettings.LightR, _materialSettings.LightG, _materialSettings.LightB, 1.0f);
+        colorArray[0] = new Color(_materialSettings.LightR, _materialSettings.LightG,
+            _materialSettings.LightB, 1.0f);
 
         _myColorTexture.SetPixels(colorArray);
         _myColorTexture.Apply();
@@ -212,45 +216,44 @@ public class MaterialGui : MonoBehaviour
         var offsetY = 30;
 
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Metallic Multiplier", _materialSettings.Metallic,
-            out _materialSettings.Metallic, 0.0f, 2.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Metallic Multiplier",
+            _materialSettings.Metallic, out _materialSettings.Metallic, 0.0f, 2.0f);
         offsetY += 40;
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Smoothness Multiplier", _materialSettings.Smoothness,
-            out _materialSettings.Smoothness,
-            0.0f, 2.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Smoothness Multiplier",
+            _materialSettings.Smoothness, out _materialSettings.Smoothness, 0.0f, 2.0f);
         offsetY += 40;
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Paralax Displacement", _materialSettings.Parallax,
-            out _materialSettings.Parallax, 0.0f, 2.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Paralax Displacement",
+            _materialSettings.Parallax, out _materialSettings.Parallax, 0.0f, 2.0f);
         offsetY += 40;
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Edge Amount", _materialSettings.EdgePower,
-            out _materialSettings.EdgePower, 0.0f, 2.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Edge Amount",
+            _materialSettings.EdgePower, out _materialSettings.EdgePower, 0.0f, 2.0f);
         offsetY += 40;
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Ambient Occlusion Power", _materialSettings.AoPower,
-            out _materialSettings.AoPower, 0.0f, 2.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Ambient Occlusion Power",
+            _materialSettings.AoPower, out _materialSettings.AoPower, 0.0f, 2.0f);
         offsetY += 40;
 
         GUI.Label(new Rect(offsetX, offsetY, 250, 30), "Light Color");
         ChooseLightColor(offsetX, offsetY + 20);
         offsetY += 160;
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Texture Tiling X", _materialSettings.TexTilingX,
-            out _materialSettings.TexTilingX, 0.1f, 5.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Texture Tiling X",
+            _materialSettings.TexTilingX, out _materialSettings.TexTilingX, 0.1f, 5.0f);
         offsetY += 30;
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Texture Tiling Y", _materialSettings.TexTilingY,
-            out _materialSettings.TexTilingY, 0.1f, 5.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Texture Tiling Y",
+            _materialSettings.TexTilingY, out _materialSettings.TexTilingY, 0.1f, 5.0f);
         offsetY += 50;
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Texture Offset X", _materialSettings.TexOffsetX,
-            out _materialSettings.TexOffsetX, -1.0f, 1.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Texture Offset X",
+            _materialSettings.TexOffsetX, out _materialSettings.TexOffsetX, -1.0f, 1.0f);
         offsetY += 30;
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Texture Offset Y", _materialSettings.TexOffsetY,
-            out _materialSettings.TexOffsetY, -1.0f, 1.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Texture Offset Y",
+            _materialSettings.TexOffsetY, out _materialSettings.TexOffsetY, -1.0f, 1.0f);
         offsetY += 50;
 
         if (GUI.Button(new Rect(offsetX, offsetY, 60, 30), "Plane"))
@@ -322,7 +325,9 @@ public class MaterialGui : MonoBehaviour
 
         _heightMap = _mainGuiScript.HeightMap;
 
-        _diffuseMap = _mainGuiScript.DiffuseMap != null ? _mainGuiScript.DiffuseMap : _mainGuiScript.DiffuseMapOriginal;
+        _diffuseMap = _mainGuiScript.DiffuseMap != null
+            ? _mainGuiScript.DiffuseMap
+            : _mainGuiScript.DiffuseMapOriginal;
         _normalMap = _mainGuiScript.NormalMap;
         _edgeMap = _mainGuiScript.EdgeMap;
         _metallicMap = _mainGuiScript.MetallicMap;

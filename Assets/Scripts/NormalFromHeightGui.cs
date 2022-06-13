@@ -181,6 +181,7 @@ public class NormalFromHeightGui : MonoBehaviour
         ThisMaterial.SetFloat(FinalContrast, _settings.FinalContrast);
 
         ThisMaterial.SetVector(LightDir, MainLight.transform.forward);
+        ThisMaterial.SetInt("_FlipNormalY", _settings.FlipNormals ? 1 : 0);
     }
 
     private void DoMyWindow(int windowId)
@@ -274,6 +275,10 @@ public class NormalFromHeightGui : MonoBehaviour
             _settings.FinalContrast, out _settings.FinalContrast, 0.0f, 10.0f);
         offsetY += 50;
 
+        _settings.FlipNormals = GUI.Toggle(new Rect(offsetX, offsetY, 280, 30),
+            _settings.FlipNormals, " Flip Normals");
+        offsetY += 50;
+
         if (GUI.Button(new Rect(offsetX + 10, offsetY, 130, 30), "Reset to Defaults"))
         {
             //_settingsInitialized = false;
@@ -286,7 +291,7 @@ public class NormalFromHeightGui : MonoBehaviour
 
         GUI.DragWindow();
         _windowRect.width = offsetX + 300;
-        _windowRect.height = offsetY + 100;
+        _windowRect.height = offsetY + 50;
     }
 
     private void OnGUI()
@@ -367,7 +372,7 @@ public class NormalFromHeightGui : MonoBehaviour
         Debug.Log("Processing Normal");
 
         _blitMaterial.SetVector("_ImageSize", new Vector4(_imageSizeX, _imageSizeY, 0, 0));
-
+        _blitMaterial.SetInt("_FlipNormalY", _settings.FlipNormals ? 1 : 0);
         _blitMaterial.SetFloat("_Blur0Weight", _settings.Blur0Weight);
         _blitMaterial.SetFloat("_Blur1Weight", _settings.Blur1Weight);
         _blitMaterial.SetFloat("_Blur2Weight", _settings.Blur2Weight);
@@ -394,10 +399,14 @@ public class NormalFromHeightGui : MonoBehaviour
 
         CleanupTexture(_tempNormalMap);
         _tempNormalMap = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.ARGB32,
-            RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
+            RenderTextureReadWrite.Linear);
+        _tempNormalMap.wrapMode = TextureWrapMode.Repeat;
         Graphics.Blit(_blurMap0, _tempNormalMap, _blitMaterial, 4);
 
-        if (_mgs.NormalMap) Destroy(_mgs.NormalMap);
+        if (_mgs.NormalMap != null)
+        {
+            Destroy(_mgs.NormalMap);
+        }
 
         RenderTexture.active = _tempNormalMap;
         _mgs.NormalMap = new Texture2D(_tempNormalMap.width, _tempNormalMap.height,
@@ -426,6 +435,7 @@ public class NormalFromHeightGui : MonoBehaviour
         _blitMaterial.SetInt("_BlurSamples", _settings.SlopeBlur);
         _blitMaterial.SetVector("_BlurDirection", new Vector4(1, 0, 0, 0));
         _blitMaterial.SetFloat("_BlurContrast", 1.0f);
+        _blitMaterial.SetInt("_FlipNormalY", _settings.FlipNormals ? 1 : 0);
 
         if (_mgs.DiffuseMapOriginal && _settings.UseDiffuse)
         {
@@ -470,11 +480,14 @@ public class NormalFromHeightGui : MonoBehaviour
         _blitMaterial.SetFloat("_BlurContrast", _settings.Blur0Contrast);
 
         if (_mgs.HdHeightMap == null)
+        {
             Graphics.Blit(_mgs.HeightMap, _blurMap0, _blitMaterial, 3);
-        else
+        } else
+        {
             Graphics.Blit(_mgs.HdHeightMap, _blurMap0, _blitMaterial, 3);
+        }
 
-        var extraSpread = (_blurMap0.width + _blurMap0.height) * 0.5f / 1024.0f;
+        var extraSpread = ((_blurMap0.width + _blurMap0.height) * 0.5f) / 1024.0f;
         var spread = 1.0f;
 
         _blitMaterial.SetFloat("_BlurContrast", 1.0f);

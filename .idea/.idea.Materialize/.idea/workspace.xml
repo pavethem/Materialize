@@ -6,18 +6,24 @@
   <component name="ChangeListManager">
     <list default="true" id="bd680e91-9dfe-4bdc-b145-084e397fb63e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Materialize/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Materialize/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/HeightFromDiffuseGui.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/HeightFromDiffuseGui.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MainScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MainScene.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/MainGui.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/MainGui.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Logs/AssetImportWorker0-prev.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Logs/AssetImportWorker1-prev.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/MaterialGui.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/MaterialGui.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/NormalFromHeightGui.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/NormalFromHeightGui.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/NormalFromHeightSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/NormalFromHeightSettings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/SmoothnessGui.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/SmoothnessGui.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Shaders/Height_From_Diffuse_Preview.shader" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Shaders/Height_From_Diffuse_Preview.shader" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Shaders/Normal_From_Height_Preview.shader" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Shaders/Normal_From_Height_Preview.shader" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Shaders/Resources/Blit_Shader.shader" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Shaders/Resources/Blit_Shader.shader" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Shaders/Smoothness_Preview.shader" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Shaders/Smoothness_Preview.shader" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Logs/AssetImportWorker0.log" beforeDir="false" afterPath="$PROJECT_DIR$/Logs/AssetImportWorker0.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Logs/AssetImportWorker1.log" beforeDir="false" afterPath="$PROJECT_DIR$/Logs/AssetImportWorker1.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Logs/shadercompiler-AssetImportWorker0.log" beforeDir="false" afterPath="$PROJECT_DIR$/Logs/shadercompiler-AssetImportWorker0.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Logs/shadercompiler-UnityShaderCompiler0.log" beforeDir="false" afterPath="$PROJECT_DIR$/Logs/shadercompiler-UnityShaderCompiler0.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Logs/shadercompiler-UnityShaderCompiler1.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Logs/shadercompiler-UnityShaderCompiler2.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Logs/shadercompiler-UnityShaderCompiler3.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Logs/shadercompiler-UnityShaderCompiler4.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Logs/shadercompiler-UnityShaderCompiler5.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Logs/shadercompiler-UnityShaderCompiler6.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Logs/shadercompiler-UnityShaderCompiler7.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/default-2022.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/default-2022.dwlt" afterDir="false" />
     </list>
@@ -98,7 +104,9 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/SampleProbeTex.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/SaveLoadProject.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/SettingsGui.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///home/maikeu/MeusProgramas/Materialize/Assets/Scripts/SmoothnessGui.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/SmoothnessGui.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///home/maikeu/MeusProgramas/Materialize/Assets/Scripts/SmoothnessGui.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/SmoothnessSettings.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/SpecularGui.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/SuggestionGui.cs" root0="FORCE_HIGHLIGHTING" />
@@ -106,6 +114,10 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/WelcomeGui.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Shaders/Alignment_Shader.shader" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Shaders/Colored Blended.shader" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///home/maikeu/MeusProgramas/Materialize/Assets/Shaders/Normal_From_Height_Preview.shader" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///home/maikeu/MeusProgramas/Materialize/Assets/Shaders/Normal_From_Height_Preview.shader" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///home/maikeu/MeusProgramas/Materialize/Assets/Shaders/Normal_From_Height_Preview.shader" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///home/maikeu/MeusProgramas/Materialize/Assets/Shaders/Normal_From_Height_Preview.shader" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Shaders/SurfacePBS_Tess_Generated.shader" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/StandaloneFileBrowser/Runtime/Common/ExtensionFilter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/StandaloneFileBrowser/Runtime/Linux/StandaloneFileBrowserLinux.cs" root0="FORCE_HIGHLIGHTING" />
@@ -292,7 +304,8 @@
       <workItem from="1655069389471" duration="116000" />
       <workItem from="1655126679750" duration="4779000" />
       <workItem from="1655132693571" duration="1093000" />
-      <workItem from="1655139048188" duration="861000" />
+      <workItem from="1655139048188" duration="1697000" />
+      <workItem from="1655142484291" duration="7818000" />
     </task>
     <servers />
   </component>

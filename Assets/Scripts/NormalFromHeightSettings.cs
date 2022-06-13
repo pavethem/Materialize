@@ -53,6 +53,8 @@ public class NormalFromHeightSettings
     [DefaultValue("50")] public string SlopeBlurText;
 
     [DefaultValue(true)] public bool UseDiffuse;
+    
+    [DefaultValue(false)] public bool FlipNormals;
 
     public NormalFromHeightSettings()
     {
@@ -89,5 +91,7 @@ public class NormalFromHeightSettings
 
         ShapeBias = 0.5f;
         ShapeBiasText = "0.5";
+
+        FlipNormals = false;
     }
 }
