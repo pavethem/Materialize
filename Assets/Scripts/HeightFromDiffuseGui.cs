@@ -136,8 +136,7 @@ public class HeightFromDiffuseGui : MonoBehaviour
         if (projectObject.HeightFromDiffuseSettings != null)
         {
             _heightFromDiffuseSettings = projectObject.HeightFromDiffuseSettings;
-        }
-        else
+        } else
         {
             _settingsInitialized = false;
             InitializeSettings();
@@ -205,7 +204,8 @@ public class HeightFromDiffuseGui : MonoBehaviour
 
     private void FixUseMaps()
     {
-        if (MainGuiScript.DiffuseMapOriginal == null && _heightFromDiffuseSettings.UseOriginalDiffuse)
+        if (MainGuiScript.DiffuseMapOriginal == null &&
+            _heightFromDiffuseSettings.UseOriginalDiffuse)
         {
             _heightFromDiffuseSettings.UseAdjustedDiffuse = true;
             _heightFromDiffuseSettings.UseOriginalDiffuse = false;
@@ -246,15 +246,9 @@ public class HeightFromDiffuseGui : MonoBehaviour
         _heightFromDiffuseSettings.UseNormal = true;
     }
 
-    public void DoStuff()
-    {
-        _doStuff = true;
-    }
+    public void DoStuff() { _doStuff = true; }
 
-    public void NewTexture()
-    {
-        _newTexture = true;
-    }
+    public void NewTexture() { _newTexture = true; }
 
     private void SetMaterialValues()
     {
@@ -341,13 +335,16 @@ public class HeightFromDiffuseGui : MonoBehaviour
             _mouseButtonDown = true;
             if (!_camera) return;
 
-            if (!Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit))
-                return;
+            if (!Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit, Mathf.Infinity, LayerMask.GetMask("Plane")))
+            {
+                Debug.LogError("Nada Encontrado");
+                return; 
+            }
+          
 
             var rend = hit.transform.GetComponent<Renderer>();
             var meshCollider = hit.collider as MeshCollider;
-            if (!rend || !rend.sharedMaterial || !rend.sharedMaterial.mainTexture ||
-                !meshCollider)
+            if (!rend || !rend.sharedMaterial || !rend.sharedMaterial.mainTexture || !meshCollider)
                 return;
 
             var pixelUv = hit.textureCoord;
@@ -426,8 +423,7 @@ public class HeightFromDiffuseGui : MonoBehaviour
             {
                 StopAllCoroutines();
                 StartCoroutine(ProcessNormal());
-            }
-            else
+            } else
             {
                 StopAllCoroutines();
                 StartCoroutine(ProcessDiffuse());
@@ -476,28 +472,29 @@ public class HeightFromDiffuseGui : MonoBehaviour
         var offsetY = 30;
 
         GUI.enabled = MainGuiScript.DiffuseMap != null;
-        _heightFromDiffuseSettings.UseAdjustedDiffuse = GUI.Toggle(new Rect(offsetX, offsetY, 80, 30),
-            _heightFromDiffuseSettings.UseAdjustedDiffuse, " Diffuse");
+        _heightFromDiffuseSettings.UseAdjustedDiffuse = GUI.Toggle(
+            new Rect(offsetX, offsetY, 80, 30), _heightFromDiffuseSettings.UseAdjustedDiffuse,
+            " Diffuse");
         if (_heightFromDiffuseSettings.UseAdjustedDiffuse)
         {
             _heightFromDiffuseSettings.UseOriginalDiffuse = false;
             _heightFromDiffuseSettings.UseNormal = false;
-        }
-        else if (!_heightFromDiffuseSettings.UseOriginalDiffuse && !_heightFromDiffuseSettings.UseNormal)
+        } else if (!_heightFromDiffuseSettings.UseOriginalDiffuse &&
+                   !_heightFromDiffuseSettings.UseNormal)
         {
             _heightFromDiffuseSettings.UseAdjustedDiffuse = true;
         }
 
         GUI.enabled = MainGuiScript.DiffuseMapOriginal != null;
-        _heightFromDiffuseSettings.UseOriginalDiffuse = GUI.Toggle(new Rect(offsetX + 80, offsetY, 120, 30),
-            _heightFromDiffuseSettings.UseOriginalDiffuse,
+        _heightFromDiffuseSettings.UseOriginalDiffuse = GUI.Toggle(
+            new Rect(offsetX + 80, offsetY, 120, 30), _heightFromDiffuseSettings.UseOriginalDiffuse,
             "Original Diffuse");
         if (_heightFromDiffuseSettings.UseOriginalDiffuse)
         {
             _heightFromDiffuseSettings.UseAdjustedDiffuse = false;
             _heightFromDiffuseSettings.UseNormal = false;
-        }
-        else if (!_heightFromDiffuseSettings.UseAdjustedDiffuse && !_heightFromDiffuseSettings.UseNormal)
+        } else if (!_heightFromDiffuseSettings.UseAdjustedDiffuse &&
+                   !_heightFromDiffuseSettings.UseNormal)
         {
             _heightFromDiffuseSettings.UseOriginalDiffuse = true;
         }
@@ -509,8 +506,8 @@ public class HeightFromDiffuseGui : MonoBehaviour
         {
             _heightFromDiffuseSettings.UseAdjustedDiffuse = false;
             _heightFromDiffuseSettings.UseOriginalDiffuse = false;
-        }
-        else if (!_heightFromDiffuseSettings.UseAdjustedDiffuse && !_heightFromDiffuseSettings.UseOriginalDiffuse)
+        } else if (!_heightFromDiffuseSettings.UseAdjustedDiffuse &&
+                   !_heightFromDiffuseSettings.UseOriginalDiffuse)
         {
             _heightFromDiffuseSettings.UseNormal = true;
         }
@@ -519,85 +516,94 @@ public class HeightFromDiffuseGui : MonoBehaviour
         offsetY += 30;
 
         GUI.Label(new Rect(offsetX, offsetY, 250, 30), "Height Reveal Slider");
-        _slider = GUI.HorizontalSlider(new Rect(offsetX, offsetY + 20, 280, 10), _slider, 0.0f, 1.0f);
+        _slider = GUI.HorizontalSlider(new Rect(offsetX, offsetY + 20, 280, 10), _slider, 0.0f,
+            1.0f);
         offsetY += 40;
 
         if (_heightFromDiffuseSettings.UseNormal)
         {
             if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 10), "Sample Spread",
-                _heightFromDiffuseSettings.Spread, out _heightFromDiffuseSettings.Spread, 10.0f, 200.0f))
+                    _heightFromDiffuseSettings.Spread, out _heightFromDiffuseSettings.Spread, 10.0f,
+                    200.0f))
                 _doStuff = true;
 
             offsetY += 40;
 
             if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 10), "Sample Spread Boost",
-                _heightFromDiffuseSettings.SpreadBoost, out _heightFromDiffuseSettings.SpreadBoost, 1.0f, 5.0f))
+                    _heightFromDiffuseSettings.SpreadBoost,
+                    out _heightFromDiffuseSettings.SpreadBoost, 1.0f, 5.0f))
                 _doStuff = true;
 
             offsetY += 40;
-        }
-        else
+        } else
         {
             GUI.Label(new Rect(offsetX, offsetY, 250, 30), "Frequency Weight Equalizer");
             GUI.Label(new Rect(offsetX + 225, offsetY, 100, 30), "Presets");
-            if (GUI.Button(new Rect(offsetX + 215, offsetY + 30, 60, 20), "Default")) SetWeightEqDefault();
-            if (GUI.Button(new Rect(offsetX + 215, offsetY + 60, 60, 20), "Details")) SetWeightEqDetail();
-            if (GUI.Button(new Rect(offsetX + 215, offsetY + 90, 60, 20), "Displace")) SetWeightEqDisplace();
+            if (GUI.Button(new Rect(offsetX + 215, offsetY + 30, 60, 20), "Default"))
+                SetWeightEqDefault();
+            if (GUI.Button(new Rect(offsetX + 215, offsetY + 60, 60, 20), "Details"))
+                SetWeightEqDetail();
+            if (GUI.Button(new Rect(offsetX + 215, offsetY + 90, 60, 20), "Displace"))
+                SetWeightEqDisplace();
 
             offsetY += 30;
             offsetX += 10;
-            _heightFromDiffuseSettings.Blur0Weight =
-                GUI.VerticalSlider(new Rect(offsetX + 180, offsetY, 10, 80), _heightFromDiffuseSettings.Blur0Weight,
-                    1.0f, 0.0f);
-            _heightFromDiffuseSettings.Blur1Weight =
-                GUI.VerticalSlider(new Rect(offsetX + 150, offsetY, 10, 80), _heightFromDiffuseSettings.Blur1Weight,
-                    1.0f, 0.0f);
-            _heightFromDiffuseSettings.Blur2Weight =
-                GUI.VerticalSlider(new Rect(offsetX + 120, offsetY, 10, 80), _heightFromDiffuseSettings.Blur2Weight,
-                    1.0f, 0.0f);
-            _heightFromDiffuseSettings.Blur3Weight =
-                GUI.VerticalSlider(new Rect(offsetX + 90, offsetY, 10, 80), _heightFromDiffuseSettings.Blur3Weight,
-                    1.0f, 0.0f);
-            _heightFromDiffuseSettings.Blur4Weight =
-                GUI.VerticalSlider(new Rect(offsetX + 60, offsetY, 10, 80), _heightFromDiffuseSettings.Blur4Weight,
-                    1.0f, 0.0f);
-            _heightFromDiffuseSettings.Blur5Weight =
-                GUI.VerticalSlider(new Rect(offsetX + 30, offsetY, 10, 80), _heightFromDiffuseSettings.Blur5Weight,
-                    1.0f, 0.0f);
-            _heightFromDiffuseSettings.Blur6Weight = GUI.VerticalSlider(new Rect(offsetX + 0, offsetY, 10, 80),
-                _heightFromDiffuseSettings.Blur6Weight, 1.0f, 0.0f);
+            _heightFromDiffuseSettings.Blur0Weight = GUI.VerticalSlider(
+                new Rect(offsetX + 180, offsetY, 10, 80), _heightFromDiffuseSettings.Blur0Weight,
+                1.0f, 0.0f);
+            _heightFromDiffuseSettings.Blur1Weight = GUI.VerticalSlider(
+                new Rect(offsetX + 150, offsetY, 10, 80), _heightFromDiffuseSettings.Blur1Weight,
+                1.0f, 0.0f);
+            _heightFromDiffuseSettings.Blur2Weight = GUI.VerticalSlider(
+                new Rect(offsetX + 120, offsetY, 10, 80), _heightFromDiffuseSettings.Blur2Weight,
+                1.0f, 0.0f);
+            _heightFromDiffuseSettings.Blur3Weight = GUI.VerticalSlider(
+                new Rect(offsetX + 90, offsetY, 10, 80), _heightFromDiffuseSettings.Blur3Weight,
+                1.0f, 0.0f);
+            _heightFromDiffuseSettings.Blur4Weight = GUI.VerticalSlider(
+                new Rect(offsetX + 60, offsetY, 10, 80), _heightFromDiffuseSettings.Blur4Weight,
+                1.0f, 0.0f);
+            _heightFromDiffuseSettings.Blur5Weight = GUI.VerticalSlider(
+                new Rect(offsetX + 30, offsetY, 10, 80), _heightFromDiffuseSettings.Blur5Weight,
+                1.0f, 0.0f);
+            _heightFromDiffuseSettings.Blur6Weight = GUI.VerticalSlider(
+                new Rect(offsetX + 0, offsetY, 10, 80), _heightFromDiffuseSettings.Blur6Weight,
+                1.0f, 0.0f);
             offsetX -= 10;
             offsetY += 100;
 
 
             GUI.Label(new Rect(offsetX, offsetY, 250, 30), "Frequency Contrast Equalizer");
             GUI.Label(new Rect(offsetX + 225, offsetY, 100, 30), "Presets");
-            if (GUI.Button(new Rect(offsetX + 215, offsetY + 30, 60, 20), "Default")) SetContrastEqDefault();
-            if (GUI.Button(new Rect(offsetX + 215, offsetY + 60, 60, 20), "Cracks")) SetContrastEqCrackedMud();
-            if (GUI.Button(new Rect(offsetX + 215, offsetY + 90, 60, 20), "Funky")) SetContrastEqFunky();
+            if (GUI.Button(new Rect(offsetX + 215, offsetY + 30, 60, 20), "Default"))
+                SetContrastEqDefault();
+            if (GUI.Button(new Rect(offsetX + 215, offsetY + 60, 60, 20), "Cracks"))
+                SetContrastEqCrackedMud();
+            if (GUI.Button(new Rect(offsetX + 215, offsetY + 90, 60, 20), "Funky"))
+                SetContrastEqFunky();
             offsetY += 30;
             offsetX += 10;
-            _heightFromDiffuseSettings.Blur0Contrast =
-                GUI.VerticalSlider(new Rect(offsetX + 180, offsetY, 10, 80), _heightFromDiffuseSettings.Blur0Contrast,
-                    5.0f, -5.0f);
-            _heightFromDiffuseSettings.Blur1Contrast =
-                GUI.VerticalSlider(new Rect(offsetX + 150, offsetY, 10, 80), _heightFromDiffuseSettings.Blur1Contrast,
-                    5.0f, -5.0f);
-            _heightFromDiffuseSettings.Blur2Contrast =
-                GUI.VerticalSlider(new Rect(offsetX + 120, offsetY, 10, 80), _heightFromDiffuseSettings.Blur2Contrast,
-                    5.0f, -5.0f);
-            _heightFromDiffuseSettings.Blur3Contrast =
-                GUI.VerticalSlider(new Rect(offsetX + 90, offsetY, 10, 80), _heightFromDiffuseSettings.Blur3Contrast,
-                    5.0f, -5.0f);
-            _heightFromDiffuseSettings.Blur4Contrast =
-                GUI.VerticalSlider(new Rect(offsetX + 60, offsetY, 10, 80), _heightFromDiffuseSettings.Blur4Contrast,
-                    5.0f, -5.0f);
-            _heightFromDiffuseSettings.Blur5Contrast =
-                GUI.VerticalSlider(new Rect(offsetX + 30, offsetY, 10, 80), _heightFromDiffuseSettings.Blur5Contrast,
-                    5.0f, -5.0f);
-            _heightFromDiffuseSettings.Blur6Contrast =
-                GUI.VerticalSlider(new Rect(offsetX + 0, offsetY, 10, 80), _heightFromDiffuseSettings.Blur6Contrast,
-                    5.0f, -5.0f);
+            _heightFromDiffuseSettings.Blur0Contrast = GUI.VerticalSlider(
+                new Rect(offsetX + 180, offsetY, 10, 80), _heightFromDiffuseSettings.Blur0Contrast,
+                5.0f, -5.0f);
+            _heightFromDiffuseSettings.Blur1Contrast = GUI.VerticalSlider(
+                new Rect(offsetX + 150, offsetY, 10, 80), _heightFromDiffuseSettings.Blur1Contrast,
+                5.0f, -5.0f);
+            _heightFromDiffuseSettings.Blur2Contrast = GUI.VerticalSlider(
+                new Rect(offsetX + 120, offsetY, 10, 80), _heightFromDiffuseSettings.Blur2Contrast,
+                5.0f, -5.0f);
+            _heightFromDiffuseSettings.Blur3Contrast = GUI.VerticalSlider(
+                new Rect(offsetX + 90, offsetY, 10, 80), _heightFromDiffuseSettings.Blur3Contrast,
+                5.0f, -5.0f);
+            _heightFromDiffuseSettings.Blur4Contrast = GUI.VerticalSlider(
+                new Rect(offsetX + 60, offsetY, 10, 80), _heightFromDiffuseSettings.Blur4Contrast,
+                5.0f, -5.0f);
+            _heightFromDiffuseSettings.Blur5Contrast = GUI.VerticalSlider(
+                new Rect(offsetX + 30, offsetY, 10, 80), _heightFromDiffuseSettings.Blur5Contrast,
+                5.0f, -5.0f);
+            _heightFromDiffuseSettings.Blur6Contrast = GUI.VerticalSlider(
+                new Rect(offsetX + 0, offsetY, 10, 80), _heightFromDiffuseSettings.Blur6Contrast,
+                5.0f, -5.0f);
             offsetX -= 10;
             GUI.Label(new Rect(offsetX + 210, offsetY + 21, 30, 30), "-");
             GUI.Label(new Rect(offsetX + 180, offsetY + 21, 30, 30), "-");
@@ -610,18 +616,22 @@ public class HeightFromDiffuseGui : MonoBehaviour
             offsetY += 100;
 
 
-            _doStuff = GuiHelper.Toggle(new Rect(offsetX, offsetY, 150, 20), _heightFromDiffuseSettings.UseSample1,
-                out _heightFromDiffuseSettings.UseSample1,
+            _doStuff = GuiHelper.Toggle(new Rect(offsetX, offsetY, 150, 20),
+                _heightFromDiffuseSettings.UseSample1, out _heightFromDiffuseSettings.UseSample1,
                 "Use Color Sample 1", _doStuff);
             if (_heightFromDiffuseSettings.UseSample1)
             {
                 _doStuff = GuiHelper.Toggle(new Rect(offsetX + 180, offsetY, 150, 20),
                     _heightFromDiffuseSettings.IsolateSample1,
                     out _heightFromDiffuseSettings.IsolateSample1, "Isolate Mask", _doStuff);
-                if (_heightFromDiffuseSettings.IsolateSample1) _heightFromDiffuseSettings.IsolateSample2 = false;
+                if (_heightFromDiffuseSettings.IsolateSample1)
+                    _heightFromDiffuseSettings.IsolateSample2 = false;
                 offsetY += 30;
 
-                if (GUI.Button(new Rect(offsetX, offsetY + 5, 80, 20), "Pick Color"))
+                if (_selectingColor && _currentSelection == 1)
+                {
+                    GUI.Label(new Rect(offsetX, offsetY + 5, 80, 20), "Picking Color");
+                } else if (GUI.Button(new Rect(offsetX, offsetY + 5, 80, 20), "Pick Color"))
                 {
                     _selectingColor = true;
                     _currentSelection = 1;
@@ -646,13 +656,13 @@ public class HeightFromDiffuseGui : MonoBehaviour
 
                 GUI.Label(new Rect(offsetX + 180, offsetY, 250, 30), "Low");
                 _doStuff = GuiHelper.VerticalSlider(new Rect(offsetX + 185, offsetY + 30, 10, 70),
-                    _heightFromDiffuseSettings.MaskLow1,
-                    out _heightFromDiffuseSettings.MaskLow1, 1.0f, 0.0f, _doStuff);
+                    _heightFromDiffuseSettings.MaskLow1, out _heightFromDiffuseSettings.MaskLow1,
+                    1.0f, 0.0f, _doStuff);
 
                 GUI.Label(new Rect(offsetX + 210, offsetY, 250, 30), "High");
                 _doStuff = GuiHelper.VerticalSlider(new Rect(offsetX + 215, offsetY + 30, 10, 70),
-                    _heightFromDiffuseSettings.MaskHigh1,
-                    out _heightFromDiffuseSettings.MaskHigh1, 1.0f, 0.0f, _doStuff);
+                    _heightFromDiffuseSettings.MaskHigh1, out _heightFromDiffuseSettings.MaskHigh1,
+                    1.0f, 0.0f, _doStuff);
 
                 GUI.Label(new Rect(offsetX + 240, offsetY, 250, 30), "Height");
                 _doStuff = GuiHelper.VerticalSlider(new Rect(offsetX + 255, offsetY + 30, 10, 70),
@@ -660,26 +670,30 @@ public class HeightFromDiffuseGui : MonoBehaviour
                     out _heightFromDiffuseSettings.Sample1Height, 1.0f, 0.0f, _doStuff);
 
                 offsetY += 110;
-            }
-            else
+            } else
             {
                 offsetY += 30;
                 _heightFromDiffuseSettings.IsolateSample1 = false;
             }
 
 
-            _doStuff = GuiHelper.Toggle(new Rect(offsetX, offsetY, 150, 20), _heightFromDiffuseSettings.UseSample2,
-                out _heightFromDiffuseSettings.UseSample2,
+            _doStuff = GuiHelper.Toggle(new Rect(offsetX, offsetY, 150, 20),
+                _heightFromDiffuseSettings.UseSample2, out _heightFromDiffuseSettings.UseSample2,
                 "Use Color Sample 2", _doStuff);
             if (_heightFromDiffuseSettings.UseSample2)
             {
                 _doStuff = GuiHelper.Toggle(new Rect(offsetX + 180, offsetY, 150, 20),
                     _heightFromDiffuseSettings.IsolateSample2,
                     out _heightFromDiffuseSettings.IsolateSample2, "Isolate Mask", _doStuff);
-                if (_heightFromDiffuseSettings.IsolateSample2) _heightFromDiffuseSettings.IsolateSample1 = false;
+                if (_heightFromDiffuseSettings.IsolateSample2)
+                    _heightFromDiffuseSettings.IsolateSample1 = false;
                 offsetY += 30;
 
-                if (GUI.Button(new Rect(offsetX, offsetY + 5, 80, 20), "Pick Color"))
+
+                if (_selectingColor && _currentSelection == 2)
+                {
+                    GUI.Label(new Rect(offsetX, offsetY + 5, 80, 20), "Picking Color");
+                } else if (GUI.Button(new Rect(offsetX, offsetY + 5, 80, 20), "Pick Color"))
                 {
                     _selectingColor = true;
                     _currentSelection = 2;
@@ -704,13 +718,13 @@ public class HeightFromDiffuseGui : MonoBehaviour
 
                 GUI.Label(new Rect(offsetX + 180, offsetY, 250, 30), "Low");
                 _doStuff = GuiHelper.VerticalSlider(new Rect(offsetX + 185, offsetY + 30, 10, 70),
-                    _heightFromDiffuseSettings.MaskLow2,
-                    out _heightFromDiffuseSettings.MaskLow2, 1.0f, 0.0f, _doStuff);
+                    _heightFromDiffuseSettings.MaskLow2, out _heightFromDiffuseSettings.MaskLow2,
+                    1.0f, 0.0f, _doStuff);
 
                 GUI.Label(new Rect(offsetX + 210, offsetY, 250, 30), "High");
                 _doStuff = GuiHelper.VerticalSlider(new Rect(offsetX + 215, offsetY + 30, 10, 70),
-                    _heightFromDiffuseSettings.MaskHigh2,
-                    out _heightFromDiffuseSettings.MaskHigh2, 1.0f, 0.0f, _doStuff);
+                    _heightFromDiffuseSettings.MaskHigh2, out _heightFromDiffuseSettings.MaskHigh2,
+                    1.0f, 0.0f, _doStuff);
 
                 GUI.Label(new Rect(offsetX + 240, offsetY, 250, 30), "Height");
                 _doStuff = GuiHelper.VerticalSlider(new Rect(offsetX + 255, offsetY + 30, 10, 70),
@@ -718,8 +732,7 @@ public class HeightFromDiffuseGui : MonoBehaviour
                     out _heightFromDiffuseSettings.Sample2Height, 1.0f, 0.0f, _doStuff);
 
                 offsetY += 110;
-            }
-            else
+            } else
             {
                 offsetY += 30;
                 _heightFromDiffuseSettings.IsolateSample2 = false;
@@ -728,23 +741,27 @@ public class HeightFromDiffuseGui : MonoBehaviour
             if (_heightFromDiffuseSettings.UseSample1 || _heightFromDiffuseSettings.UseSample2)
             {
                 if (GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Sample Blend",
-                    _heightFromDiffuseSettings.SampleBlend, out _heightFromDiffuseSettings.SampleBlend, 0.0f, 1.0f))
+                        _heightFromDiffuseSettings.SampleBlend,
+                        out _heightFromDiffuseSettings.SampleBlend, 0.0f, 1.0f))
                     _doStuff = true;
                 offsetY += 40;
             }
         }
 
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Final Gain", _heightFromDiffuseSettings.FinalGain,
-            out _heightFromDiffuseSettings.FinalGain, -0.5f, 0.5f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Final Gain",
+            _heightFromDiffuseSettings.FinalGain, out _heightFromDiffuseSettings.FinalGain, -0.5f,
+            0.5f);
         offsetY += 40;
 
         GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Final Contrast",
-            _heightFromDiffuseSettings.FinalContrast, out _heightFromDiffuseSettings.FinalContrast, -10.0f, 10.0f);
+            _heightFromDiffuseSettings.FinalContrast, out _heightFromDiffuseSettings.FinalContrast,
+            -10.0f, 10.0f);
         offsetY += 40;
 
-        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Final Bias", _heightFromDiffuseSettings.FinalBias,
-            out _heightFromDiffuseSettings.FinalBias, -1.0f, 1.0f);
+        GuiHelper.Slider(new Rect(offsetX, offsetY, 280, 50), "Final Bias",
+            _heightFromDiffuseSettings.FinalBias, out _heightFromDiffuseSettings.FinalBias, -1.0f,
+            1.0f);
         offsetY += 50;
 
         GUI.enabled = !Busy;
@@ -757,8 +774,8 @@ public class HeightFromDiffuseGui : MonoBehaviour
             {
                 _heightFromDiffuseSettings.UseAdjustedDiffuse = false;
                 _heightFromDiffuseSettings.UseNormal = false;
-            }
-            else if (!_heightFromDiffuseSettings.UseAdjustedDiffuse && !_heightFromDiffuseSettings.UseNormal)
+            } else if (!_heightFromDiffuseSettings.UseAdjustedDiffuse &&
+                       !_heightFromDiffuseSettings.UseNormal)
             {
                 _heightFromDiffuseSettings.UseOriginalDiffuse = true;
             }
@@ -766,7 +783,8 @@ public class HeightFromDiffuseGui : MonoBehaviour
             //StartCoroutine(ProcessDiffuse());
         }
 
-        if (GUI.Button(new Rect(offsetX + 150, offsetY, 130, 30), "Set as Height Map")) StartCoroutine(ProcessHeight());
+        if (GUI.Button(new Rect(offsetX + 150, offsetY, 130, 30), "Set as Height Map"))
+            StartCoroutine(ProcessHeight());
         GUI.enabled = true;
 
         GUI.DragWindow();
@@ -777,12 +795,15 @@ public class HeightFromDiffuseGui : MonoBehaviour
         _windowRect.width = 300;
         _windowRect.height = 590;
 
-        if (_heightFromDiffuseSettings.UseSample1 && !_heightFromDiffuseSettings.UseNormal) _windowRect.height += 110;
+        if (_heightFromDiffuseSettings.UseSample1 && !_heightFromDiffuseSettings.UseNormal)
+            _windowRect.height += 110;
 
-        if (_heightFromDiffuseSettings.UseSample2 && !_heightFromDiffuseSettings.UseNormal) _windowRect.height += 110;
+        if (_heightFromDiffuseSettings.UseSample2 && !_heightFromDiffuseSettings.UseNormal)
+            _windowRect.height += 110;
 
         if ((_heightFromDiffuseSettings.UseSample1 || _heightFromDiffuseSettings.UseSample2) &&
-            !_heightFromDiffuseSettings.UseNormal) _windowRect.height += 40;
+            !_heightFromDiffuseSettings.UseNormal)
+            _windowRect.height += 40;
 
         _windowRect = GUI.Window(13, _windowRect, DoMyWindow, "Height From Diffuse");
     }
@@ -799,13 +820,11 @@ public class HeightFromDiffuseGui : MonoBehaviour
         {
             _imageSizeX = MainGuiScript.DiffuseMap.width;
             _imageSizeY = MainGuiScript.DiffuseMap.height;
-        }
-        else if (_heightFromDiffuseSettings.UseOriginalDiffuse)
+        } else if (_heightFromDiffuseSettings.UseOriginalDiffuse)
         {
             _imageSizeX = MainGuiScript.DiffuseMapOriginal.width;
             _imageSizeY = MainGuiScript.DiffuseMapOriginal.height;
-        }
-        else if (_heightFromDiffuseSettings.UseNormal)
+        } else if (_heightFromDiffuseSettings.UseNormal)
         {
             _imageSizeX = MainGuiScript.NormalMap.width;
             _imageSizeY = MainGuiScript.NormalMap.height;
@@ -815,31 +834,28 @@ public class HeightFromDiffuseGui : MonoBehaviour
 //        Debug.Log("Initializing Textures of size: " + _imageSizeX + "x" + _imageSizeY);
 
         _tempBlurMap = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.RFloat,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
         _blurMap0 = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.RFloat,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
         _blurMap1 = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.RFloat,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
         _blurMap2 = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.RFloat,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
         _blurMap3 = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.RFloat,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
         _blurMap4 = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.RFloat,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
         _blurMap5 = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.RFloat,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
         _blurMap6 = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.RFloat,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
 
-        _avgMap = new RenderTexture(256, 256, 0, RenderTextureFormat.RFloat, RenderTextureReadWrite.Linear)
-        {
-            wrapMode = TextureWrapMode.Repeat
-        };
+        _avgMap = new RenderTexture(256, 256, 0, RenderTextureFormat.RFloat,
+            RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
 
-        _avgTempMap = new RenderTexture(256, 256, 0, RenderTextureFormat.RFloat, RenderTextureReadWrite.Linear)
-        {
-            wrapMode = TextureWrapMode.Repeat
-        };
+        _avgTempMap =
+            new RenderTexture(256, 256, 0, RenderTextureFormat.RFloat,
+                RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
 
         SetMaterialValues();
     }
@@ -873,10 +889,7 @@ public class HeightFromDiffuseGui : MonoBehaviour
         CleanupTexture(_avgTempMap);
     }
 
-    public void StartProcessHeight()
-    {
-        StartCoroutine(ProcessHeight());
-    }
+    public void StartProcessHeight() { StartCoroutine(ProcessHeight()); }
 
     public IEnumerator ProcessHeight()
     {
@@ -885,7 +898,7 @@ public class HeightFromDiffuseGui : MonoBehaviour
 
         CleanupTexture(_tempHeightMap);
         _tempHeightMap = new RenderTexture(_imageSizeX, _imageSizeY, 0, RenderTextureFormat.ARGB32,
-            RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+            RenderTextureReadWrite.Linear) { wrapMode = TextureWrapMode.Repeat };
 
         _blitMaterial.SetFloat(FinalContrast, _heightFromDiffuseSettings.FinalContrast);
         _blitMaterial.SetFloat(FinalBias, _heightFromDiffuseSettings.FinalBias);
@@ -903,8 +916,7 @@ public class HeightFromDiffuseGui : MonoBehaviour
             _blitMaterial.SetFloat(HeightFromNormal, 1.0f);
             // Save low fidelity for texture 2d
             Graphics.Blit(_blurMap0, _tempHeightMap, _blitMaterial, 2);
-        }
-        else
+        } else
         {
             _blitMaterial.SetFloat(HeightFromNormal, 0.0f);
 
@@ -942,9 +954,10 @@ public class HeightFromDiffuseGui : MonoBehaviour
         if (MainGuiScript.HeightMap) Destroy(MainGuiScript.HeightMap);
 
         RenderTexture.active = _tempHeightMap;
-        MainGuiScript.HeightMap =
-            new Texture2D(_tempHeightMap.width, _tempHeightMap.height, TextureFormat.ARGB32, true, true);
-        MainGuiScript.HeightMap.ReadPixels(new Rect(0, 0, _tempHeightMap.width, _tempHeightMap.height), 0, 0);
+        MainGuiScript.HeightMap = new Texture2D(_tempHeightMap.width, _tempHeightMap.height,
+            TextureFormat.ARGB32, true, true);
+        MainGuiScript.HeightMap.ReadPixels(
+            new Rect(0, 0, _tempHeightMap.width, _tempHeightMap.height), 0, 0);
         MainGuiScript.HeightMap.Apply();
         RenderTexture.active = null;
 
@@ -955,8 +968,12 @@ public class HeightFromDiffuseGui : MonoBehaviour
             MainGuiScript.HdHeightMap = null;
         }
 
-        MainGuiScript.HdHeightMap = new RenderTexture(_tempHeightMap.width, _tempHeightMap.height, 0,
-            RenderTextureFormat.RHalf, RenderTextureReadWrite.Linear) {wrapMode = TextureWrapMode.Repeat};
+        MainGuiScript.HdHeightMap =
+            new RenderTexture(_tempHeightMap.width, _tempHeightMap.height, 0,
+                RenderTextureFormat.RHalf, RenderTextureReadWrite.Linear)
+            {
+                wrapMode = TextureWrapMode.Repeat
+            };
         Graphics.Blit(_blurMap0, MainGuiScript.HdHeightMap, _blitMaterial, 2);
 
         CleanupTexture(_tempHeightMap);
@@ -975,7 +992,7 @@ public class HeightFromDiffuseGui : MonoBehaviour
         _blitMaterialNormal.SetVector(ImageSize, new Vector4(_imageSizeX, _imageSizeY, 0, 0));
         _blitMaterialNormal.SetFloat(Spread, _heightFromDiffuseSettings.Spread);
         _blitMaterialNormal.SetFloat(SpreadBoost, _heightFromDiffuseSettings.SpreadBoost);
-        _blitMaterialNormal.SetFloat(Samples, (int) _heightFromDiffuseSettings.Spread);
+        _blitMaterialNormal.SetFloat(Samples, (int)_heightFromDiffuseSettings.Spread);
         _blitMaterialNormal.SetTexture(MainTex, MainGuiScript.NormalMap);
         _blitMaterialNormal.SetTexture(BlendTex, _blurMap1);
 
@@ -1008,11 +1025,13 @@ public class HeightFromDiffuseGui : MonoBehaviour
         Busy = true;
         ThisMaterial.SetFloat(IsNormal, 0.0f);
 
-        _blitMaterialSample.SetInt(IsolateSample1, _heightFromDiffuseSettings.IsolateSample1 ? 1 : 0);
+        _blitMaterialSample.SetInt(IsolateSample1,
+            _heightFromDiffuseSettings.IsolateSample1 ? 1 : 0);
         _blitMaterialSample.SetInt(UseSample1, _heightFromDiffuseSettings.UseSample1 ? 1 : 0);
         _blitMaterialSample.SetColor(SampleColor1, _heightFromDiffuseSettings.SampleColor1);
         _blitMaterialSample.SetVector(SampleUv1,
-            new Vector4(_heightFromDiffuseSettings.SampleUv1.x, _heightFromDiffuseSettings.SampleUv1.y, 0, 0));
+            new Vector4(_heightFromDiffuseSettings.SampleUv1.x,
+                _heightFromDiffuseSettings.SampleUv1.y, 0, 0));
         _blitMaterialSample.SetFloat(HueWeight1, _heightFromDiffuseSettings.HueWeight1);
         _blitMaterialSample.SetFloat(SatWeight1, _heightFromDiffuseSettings.SatWeight1);
         _blitMaterialSample.SetFloat(LumWeight1, _heightFromDiffuseSettings.LumWeight1);
@@ -1020,11 +1039,13 @@ public class HeightFromDiffuseGui : MonoBehaviour
         _blitMaterialSample.SetFloat(MaskHigh1, _heightFromDiffuseSettings.MaskHigh1);
         _blitMaterialSample.SetFloat(Sample1Height, _heightFromDiffuseSettings.Sample1Height);
 
-        _blitMaterialSample.SetInt(IsolateSample2, _heightFromDiffuseSettings.IsolateSample2 ? 1 : 0);
+        _blitMaterialSample.SetInt(IsolateSample2,
+            _heightFromDiffuseSettings.IsolateSample2 ? 1 : 0);
         _blitMaterialSample.SetInt(UseSample2, _heightFromDiffuseSettings.UseSample2 ? 1 : 0);
         _blitMaterialSample.SetColor(SampleColor2, _heightFromDiffuseSettings.SampleColor2);
         _blitMaterialSample.SetVector(SampleUv2,
-            new Vector4(_heightFromDiffuseSettings.SampleUv2.x, _heightFromDiffuseSettings.SampleUv2.y, 0, 0));
+            new Vector4(_heightFromDiffuseSettings.SampleUv2.x,
+                _heightFromDiffuseSettings.SampleUv2.y, 0, 0));
         _blitMaterialSample.SetFloat(HueWeight2, _heightFromDiffuseSettings.HueWeight2);
         _blitMaterialSample.SetFloat(SatWeight2, _heightFromDiffuseSettings.SatWeight2);
         _blitMaterialSample.SetFloat(LumWeight2, _heightFromDiffuseSettings.LumWeight2);
@@ -1032,7 +1053,8 @@ public class HeightFromDiffuseGui : MonoBehaviour
         _blitMaterialSample.SetFloat(MaskHigh2, _heightFromDiffuseSettings.MaskHigh2);
         _blitMaterialSample.SetFloat(Sample2Height, _heightFromDiffuseSettings.Sample2Height);
 
-        if (_heightFromDiffuseSettings.UseSample1 == false && _heightFromDiffuseSettings.UseSample2 == false)
+        if (_heightFromDiffuseSettings.UseSample1 == false &&
+            _heightFromDiffuseSettings.UseSample2 == false)
             _blitMaterialSample.SetFloat(SampleBlend, 0.0f);
         else
             _blitMaterialSample.SetFloat(SampleBlend, _heightFromDiffuseSettings.SampleBlend);
@@ -1041,8 +1063,9 @@ public class HeightFromDiffuseGui : MonoBehaviour
         _blitMaterialSample.SetFloat(FinalBias, _heightFromDiffuseSettings.FinalBias);
 
         Graphics.Blit(
-            _heightFromDiffuseSettings.UseOriginalDiffuse ? MainGuiScript.DiffuseMapOriginal : MainGuiScript.DiffuseMap,
-            _blurMap0, _blitMaterialSample, 0);
+            _heightFromDiffuseSettings.UseOriginalDiffuse
+                ? MainGuiScript.DiffuseMapOriginal
+                : MainGuiScript.DiffuseMap, _blurMap0, _blitMaterialSample, 0);
 
         _blitMaterial.SetVector(ImageSize, new Vector4(_imageSizeX, _imageSizeY, 0, 0));
         _blitMaterial.SetFloat(BlurContrast, 1.0f);

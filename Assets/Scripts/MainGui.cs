@@ -1423,9 +1423,9 @@ public class MainGui : MonoBehaviour
         var path =
             StandaloneFileBrowser.Runtime.StandaloneFileBrowser.OpenFilePanel(title, LastDirectory,
                 _imageLoadFilter, false);
-        if (StringExt.IsNullOrEmpty(path[0])) return;
+        if (path.Length == 0 || StringExt.IsNullOrEmpty(path[0])) return;
         var lastBar = path[0].LastIndexOf(PathChar);
-        LastDirectory = path[0].Substring(0, lastBar + 1);
+        LastDirectory = path[0][..(lastBar + 1)];
         OpenFile(path[0]);
     }
 

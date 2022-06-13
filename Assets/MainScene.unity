@@ -2440,7 +2440,7 @@ GameObject:
   m_Component:
   - component: {fileID: 543450652270306334}
   - component: {fileID: 919132148336098981}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: box_plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2595,7 +2595,8 @@ GameObject:
   - component: {fileID: 8887890092259829435}
   - component: {fileID: 5965635534347142}
   - component: {fileID: 2161058161197926763}
-  m_Layer: 0
+  - component: {fileID: 8887890092259829436}
+  m_Layer: 6
   m_Name: plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2617,3 +2618,17 @@ Transform:
   m_Father: {fileID: 543450652270306334}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!64 &8887890092259829436
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8613582465631233250}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 9166428700591565276, guid: c2cab6d50c049ad48868752e7c23be91, type: 3}
